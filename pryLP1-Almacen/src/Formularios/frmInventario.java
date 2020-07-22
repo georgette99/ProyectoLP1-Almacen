@@ -1,6 +1,8 @@
 
 package Formularios;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -9,6 +11,11 @@ public class frmInventario extends javax.swing.JFrame {
 
     public frmInventario() {
         initComponents();
+        
+        //Fuente Inventario
+        Font fuente1 = new Font("Yellow Rabbit - Personal Use", 0, 72);
+        labelInventario.setFont(fuente1);
+        labelInventario.setForeground(Color.WHITE);
         
         //Icono Agregar
         ImageIcon imgAgregar = new ImageIcon(getClass().getResource("/Imagenes/Agregar.png"));
@@ -367,10 +374,9 @@ public class frmInventario extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
