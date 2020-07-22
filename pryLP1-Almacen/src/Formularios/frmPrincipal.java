@@ -21,8 +21,8 @@ public class frmPrincipal extends javax.swing.JFrame {
      */
     public frmPrincipal() {
         initComponents();
-        ImageIcon imgUsuarios = new ImageIcon(getClass().getResource("/Imagenes/usuario.png"));
-        Icon iconoUsuario = new ImageIcon(imgUsuarios.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT));
+        ImageIcon imgUsuarios = new ImageIcon(getClass().getResource("/Imagenes/Usuariooo.png"));
+        Icon iconoUsuario = new ImageIcon(imgUsuarios.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
         jButton1.setIcon(iconoUsuario);
     }
 
@@ -50,10 +50,20 @@ public class frmPrincipal extends javax.swing.JFrame {
         setTitle("MENÚ PRINCIPAL");
 
         jButton2.setText("TRABAJADORES");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("PROVEEDORES");
 
         jButton4.setText("INVENTARIO");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("FACTURAS");
 
@@ -137,6 +147,16 @@ public class frmPrincipal extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+       frmInventario objInventario = new frmInventario();
+       objInventario.setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        frmEmpleados objEmpleados = new frmEmpleados();
+        objEmpleados.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
