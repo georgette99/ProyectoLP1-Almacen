@@ -4,17 +4,19 @@ package Formularios;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 public class frmClientes extends javax.swing.JFrame {
     
     public frmClientes() {
         initComponents();
-    
-    //Label clientes
-    ImageIcon imgClientes = new ImageIcon(getClass().getResource("/Imagenes/Clientes.png"));
-    Icon iconoClientes = new ImageIcon(imgClientes.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-    labelClientes.setIcon(iconoClientes);
-    
+        btnAgregar.setIcon(setIcono("/Imagenes/Agregar.png", btnAgregar));
+        btnEditar.setIcon(setIcono("/Imagenes/editar.png", btnEditar));
+        btnGuardar.setIcon(setIcono("/Imagenes/Guardar.png", btnGuardar));
+        btnCancelar.setIcon(setIcono("/Imagenes/Cancelar.png", btnCancelar));
+        btnEliminar.setIcon(setIcono("/Imagenes/Eliminar.png", btnEliminar));
+        btnBuscar.setIcon(setIcono("/Imagenes/buscar.png", btnBuscar));
+   
     }
 
     @SuppressWarnings("unchecked")
@@ -63,14 +65,19 @@ public class frmClientes extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 204, 102));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Registro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
+        btnAgregar.setBackground(new java.awt.Color(204, 153, 0));
         btnAgregar.setText("Agregar");
 
+        btnEditar.setBackground(new java.awt.Color(204, 153, 0));
         btnEditar.setText("Editar");
 
+        btnCancelar.setBackground(new java.awt.Color(204, 153, 0));
         btnCancelar.setText("Cancelar");
 
+        btnEliminar.setBackground(new java.awt.Color(204, 153, 0));
         btnEliminar.setText("Eliminar");
 
+        btnGuardar.setBackground(new java.awt.Color(204, 153, 0));
         btnGuardar.setText("Guardar");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -78,27 +85,31 @@ public class frmClientes extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(btnAgregar)
-                .addGap(41, 41, 41)
-                .addComponent(btnEditar)
-                .addGap(41, 41, 41)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEliminar))
+                .addGap(85, 85, 85))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(155, 155, 155)
                 .addComponent(btnGuardar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                .addComponent(btnEliminar)
-                .addGap(34, 34, 34)
+                .addGap(49, 49, 49)
                 .addComponent(btnCancelar)
-                .addGap(30, 30, 30))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(164, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(btnAgregar)
+                .addGap(28, 28, 28)
+                .addComponent(btnEditar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(btnEliminar)
+                .addGap(23, 23, 23)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAgregar)
-                    .addComponent(btnEditar)
                     .addComponent(btnCancelar)
-                    .addComponent(btnEliminar)
                     .addComponent(btnGuardar))
                 .addContainerGap())
         );
@@ -108,6 +119,7 @@ public class frmClientes extends javax.swing.JFrame {
 
         jTextField1.setText("jTextField1");
 
+        btnBuscar.setBackground(new java.awt.Color(204, 153, 0));
         btnBuscar.setText("Buscar");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -134,7 +146,7 @@ public class frmClientes extends javax.swing.JFrame {
                 .addComponent(btnBuscar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(64, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(57, 57, 57))
         );
@@ -204,6 +216,13 @@ public class frmClientes extends javax.swing.JFrame {
                 new frmClientes().setVisible(true);
             }
         });
+    }
+    
+    public Icon setIcono(String url, JButton boton){
+         ImageIcon icon = new ImageIcon(getClass().getResource(url));
+         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+         boton.setIcon(icono);
+         return icono;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 public class frmInventario extends javax.swing.JFrame {
 
@@ -16,6 +17,13 @@ public class frmInventario extends javax.swing.JFrame {
         Font fuente1 = new Font("Yellow Rabbit - Personal Use", 0, 72);
         labelInventario.setFont(fuente1);
         labelInventario.setForeground(Color.WHITE);
+        
+        btnAgregar.setIcon(setIcono("/Imagenes/Agregar.png", btnAgregar));
+        btnEditar.setIcon(setIcono("/Imagenes/editar.png", btnEditar));
+        btnGuardar.setIcon(setIcono("/Imagenes/Guardar.png", btnGuardar));
+        btnCancelar.setIcon(setIcono("/Imagenes/Cancelar.png", btnCancelar));
+        btnEliminar.setIcon(setIcono("/Imagenes/Eliminar.png", btnEliminar));
+        btnBuscar.setIcon(setIcono("/Imagenes/buscar.png", btnBuscar));
        
 
     }
@@ -28,7 +36,7 @@ public class frmInventario extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
         jPanel1 = new javax.swing.JPanel();
-        btnNuevo = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
@@ -75,10 +83,10 @@ public class frmInventario extends javax.swing.JFrame {
         jPanel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jPanel1.setName(""); // NOI18N
 
-        btnNuevo.setBackground(new java.awt.Color(51, 0, 51));
-        btnNuevo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnNuevo.setForeground(new java.awt.Color(255, 255, 255));
-        btnNuevo.setText("Agregar");
+        btnAgregar.setBackground(new java.awt.Color(51, 0, 51));
+        btnAgregar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregar.setText("Agregar");
 
         btnGuardar.setBackground(new java.awt.Color(51, 0, 51));
         btnGuardar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -150,7 +158,7 @@ public class frmInventario extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE))
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -167,7 +175,7 @@ public class frmInventario extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addComponent(btnNuevo))
+                                .addComponent(btnAgregar))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -400,14 +408,21 @@ public class frmInventario extends javax.swing.JFrame {
             }
         });
     }
+    
+    public Icon setIcono(String url, JButton boton){
+         ImageIcon icon = new ImageIcon(getClass().getResource(url));
+         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+         boton.setIcon(icono);
+         return icono;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnNuevo;
     private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
