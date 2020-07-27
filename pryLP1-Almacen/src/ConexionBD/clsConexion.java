@@ -28,7 +28,7 @@ public class clsConexion {
         strServer = "jdbc:mysql://localhost:3306/";
         strBD = "bdalmacen";
         strUsuario = "root";
-        strPassword = "7699";
+        strPassword = "123";
         
         try {
 
