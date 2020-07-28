@@ -5,7 +5,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pckEmpleados.clsEmpleados;
+import pckClases.clsClientes;
+import pckClases.clsEmpleados;
+import pckClases.clsProveedores;
+import pckClases.clsInventario;
 
 public class clsConexion {
     
@@ -59,10 +62,12 @@ public class clsConexion {
         }
     }
     
+    //EMPLEADOS
     public void mtdAgregarDato ( String pCod, String pDNI, String pNombre, String pAp_pat,
                                  String pAp_mat, String pDireccion, String pCorreo, 
                                  String pTelef, String pSexo, String pCargo, String pAr_trab){
-        strSQL = "INSERT INTO empleados VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        strSQL = "INSERT INTO empleados(Codigo, DNI, Nombres, Ap_pat, Ap_mat, Direccion, Correo, Telefono, Sexo, Cargo, Area_Trabajo)"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps;
                  
         try {
@@ -82,7 +87,8 @@ public class clsConexion {
             System.out.println("registro grabado");
             ps.executeUpdate();
             ps.close();
-        } catch (Exception e) {
+        } 
+        catch (SQLException e) {
             System.out.println("Error en escritura del registro");
         }
     }
@@ -101,7 +107,7 @@ public class clsConexion {
         }
     }
     public clsEmpleados mtdBuscarRegistro(String pDato) {
-	strSQL = "SELECT * FROM empleados WHERE Nombres = ?";
+	strSQL = "SELECT * FROM empleados WHERE Codigo = ?";
         clsEmpleados embqd = null;
 	PreparedStatement ps;
 	try {
@@ -164,5 +170,286 @@ public class clsConexion {
             Logger.getLogger(clsConexion.class.getName()).log(Level.SEVERE, null, ex);
         } 
         return list;
+    }
+    
+    //CLIENTES
+    public void mtdAgregarDatoCliente ( String pCodigo, String pRUC, String pNombre,  String pDireccion, 
+                                 String pTelefono, String pCorreo){
+        strSQL = "INSERT INTO clientes VALUES(?, ?, ?, ?, ?, ?)";
+        PreparedStatement ps;
+                 
+        try {
+            ps = objcnn.prepareStatement(strSQL);
+            ps.setString(1, pCodigo);
+            ps.setString(2, pRUC);
+            ps.setString(3, pNombre);
+            ps.setString(4, pDireccion);
+            ps.setString(5, pTelefono);
+            ps.setString(6, pCorreo);
+
+            
+            System.out.println("registro grabado");
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception e) {
+            System.out.println("Error en escritura del registro");
+        }
+    }
+    public void mtdObtenerDatosTablaClientes(){
+        strSQL = "SELECT *FROM clientes";
+        PreparedStatement st;
+        
+        try {
+            st = objcnn.prepareStatement(strSQL);
+            objRst = st.executeQuery();
+            System.out.println("Apertura exitosa de la tabla");
+            st.close();
+        } catch (Exception e) {
+            System.out.println("Error de apertura");
+        }
+    }
+    public clsClientes mtdBuscarRegistroCliente(String pDato){
+        strSQL = "SELECT * FROM clientes WHERE Codigo = ?";
+        clsClientes cliente = null;
+	PreparedStatement ps;
+	try {
+		ps = objcnn.prepareStatement(strSQL);
+		ps.setString(1, pDato);
+
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+                        cliente = new clsClientes();
+                    
+			cliente.setCodigo(rs.getString("Codigo"));
+                        cliente.setRUC(rs.getString("RUC"));
+			cliente.setNombre(rs.getString("Nombre"));
+                        cliente.setDireccion(rs.getString("Direccion"));
+                        cliente.setTelefono(rs.getString("Telefono"));
+                        cliente.setCorreo(rs.getString("Correo"));
+                        
+                       
+		}
+		rs.close();
+		ps.close();
+	} catch(Exception e) {
+		System.out.println(e.getMessage());
+	}
+        return cliente;
+    }  
+    public ArrayList<clsClientes> obtenerTodosClientes(){
+        ArrayList<clsClientes> list = new ArrayList();
+        String SQL = "SELECT * FROM clientes ";
+        PreparedStatement ps;
+        ResultSet rs;
+        clsClientes us;
+        
+        try {
+            ps= objcnn.prepareStatement(SQL);
+            rs= ps.executeQuery();
+            
+            while(rs.next()){
+                us = new clsClientes();
+                us.setCodigo(rs.getString("Codigo"));
+                us.setRUC(rs.getString("RUC"));
+                us.setNombre(rs.getString("Nombre"));
+                us.setDireccion(rs.getString("Direccion"));
+                us.setTelefono(rs.getString("Telefono"));
+                us.setCorreo(rs.getString("Correo"));
+                list.add(us);
+            }
+            ps.close();
+            rs.close();
+
+        } catch (Exception ex) {
+            Logger.getLogger(clsConexion.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return list;
+    }
+    
+    //PROVEEDORES
+    public void mtdAgregarDatoProveedores (String pCodigo, String pNombre, String pDireccion, String pTelefono, String pCorreo){
+        strSQL = "INSERT INTO proveedores (Codigo, Nombre, Direccion, Telefono, Correo) VALUES(?, ?, ?, ?, ?)";
+        PreparedStatement ps;
+                 
+        try {
+            ps = objcnn.prepareStatement(strSQL);
+            ps.setString(1, pCodigo);
+            ps.setString(2, pNombre);
+            ps.setString(3, pDireccion);
+            ps.setString(4, pTelefono);
+            ps.setString(5, pCorreo);
+            
+            System.out.println("registro grabado");
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception e) {
+            System.out.println("Error en escritura del registro");
+        }
+        
+    }
+    public void mtdObtenerDatosTablaProveedores (){
+        strSQL = "SELECT * FROM proveedores";
+        PreparedStatement st;
+        
+        try {
+            st = objcnn.prepareStatement(strSQL);
+           
+            objRst = st.executeQuery();
+            System.out.println("Apertura exitosa de la tabla");
+            st.close();
+        } catch (SQLException e) {
+            System.out.println("Error de apertura");
+        }
+    }
+    public clsProveedores mtdBuscarRegistroProveedor(String pDato){
+        strSQL = "SELECT * FROM clientes WHERE Codigo = ?";
+        clsProveedores prov = null;
+	PreparedStatement ps;
+	try {
+		ps = objcnn.prepareStatement(strSQL);
+		ps.setString(1, pDato);
+
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+                        prov= new clsProveedores();
+                    
+			prov.setCodigo(rs.getString("Codigo"));
+                        prov.setNombre("Nombre");
+			prov.setDireccion(rs.getString("Direccion"));
+                        prov.setTelefono(rs.getString("Telefono"));
+                        prov.setCorreo(rs.getString("Correo"));
+		}
+		rs.close();
+		ps.close();
+	} catch(Exception e) {
+		System.out.println(e.getMessage());
+	}
+        return prov;
+    }
+    public ArrayList<clsProveedores> obtenerTodosProveedores(){
+        ArrayList<clsProveedores> list = new ArrayList();
+        String SQL = "SELECT * FROM proveedores ";
+        PreparedStatement ps;
+        ResultSet rs;
+        clsProveedores us;
+        
+        try {
+            ps= objcnn.prepareStatement(SQL);
+            rs= ps.executeQuery();
+            
+            while(rs.next()){
+                us = new clsProveedores();
+                us.setCodigo(rs.getString("Codigo"));
+                us.setNombre(rs.getString("Nombre"));
+                us.setDireccion(rs.getString("Direccion"));
+                us.setDireccion(rs.getString("Direccion"));
+                us.setTelefono(rs.getString("Telefono"));
+                us.setCorreo(rs.getString("Correo"));
+                list.add(us);
+            }
+            ps.close();
+            rs.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(clsConexion.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return list;
+    }
+    
+    //INVENTARIO
+    public ArrayList<clsInventario> obtenerDatos(){
+        ArrayList<clsInventario> list = new ArrayList();
+        String SQL = "SELECT * FROM inventario ";
+        PreparedStatement ps;
+        ResultSet rs;
+        clsInventario in;
+        
+        try {
+            ps= objcnn.prepareStatement(SQL);
+            rs= ps.executeQuery();
+            
+            while(rs.next()){
+                in = new clsInventario();
+                in.setCodigo_Inv(rs.getString("Cod_Inv"));
+                in.setStock(rs.getString("Stock"));
+                in.setDescripcion(rs.getString("Descripcion"));
+                in.setPrecio(rs.getString("Precio"));
+                in.setLinea(rs.getString("Linea"));
+                in.setUnidad(rs.getString("Unidad"));
+                list.add(in);
+            }
+            ps.close();
+            rs.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(clsConexion.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return list;
+    }
+    
+    public void mtdAgregarProducto (String pCodIn, String pStock, String pDescripcion, String pPrecio,
+                                 String pLinea, String pUnidad){
+        strSQL = "INSERT INTO inventario VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement ps;
+                 
+        try {
+            ps = objcnn.prepareStatement(strSQL);
+            ps.setString(1, pCodIn);
+            ps.setString(2, pStock);
+            ps.setString(3, pDescripcion);
+            ps.setString(4, pPrecio);
+            ps.setString(5, pLinea);
+            ps.setString(6, pUnidad);
+            
+            System.out.println("Registro grabado");
+            ps.executeUpdate();
+            ps.close();
+            } 
+            catch (Exception e) {
+            System.out.println( "error " + e.getMessage());
+        }
+    }
+    
+    public void mtdObtenerProd(){
+        strSQL = "SELECT * FROM inventario";
+        PreparedStatement st;
+        
+        try {
+            st = objcnn.prepareStatement(strSQL);
+           
+            objRst = st.executeQuery();
+            System.out.println("Apertura exitosa de la tabla");
+            st.close();
+        } catch (Exception e) {
+            System.out.println("Error de apertura");
+        }
+    }
+    
+    public clsInventario mtdBuscarProducto(String pDato) {
+	strSQL = "SELECT * FROM inventario WHERE Cod_Inv = ?";
+        clsInventario prbqd = null;
+	PreparedStatement ps;
+	try {
+		ps = objcnn.prepareStatement(strSQL);
+		ps.setString(1, pDato);
+
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+                        prbqd= new clsInventario();
+                    
+			prbqd.setCodigo_Inv(rs.getString("Cod_Inv"));
+                        prbqd.setStock(rs.getString("Stock"));
+			prbqd.setDescripcion(rs.getString("Descripcion"));
+			prbqd.setDescripcion(rs.getString("Precio"));
+                        prbqd.setLinea(rs.getString("Linea"));
+                        prbqd.setUnidad(rs.getString("Unidad"));
+
+		}
+		rs.close();
+		ps.close();
+	} catch(Exception e) {
+		System.out.println(e.getMessage());
+	}
+        return prbqd;
     }
 }

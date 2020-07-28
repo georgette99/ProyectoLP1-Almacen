@@ -1,4 +1,4 @@
-package pckEmpleados;
+package pckClases;
 
 public class clsEmpleados {
     

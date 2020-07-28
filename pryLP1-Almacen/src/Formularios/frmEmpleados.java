@@ -3,21 +3,26 @@ package Formularios;
 
 import ConexionBD.clsConexion;
 import java.awt.Image;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import pckEmpleados.clsEmpleados;
+import pckClases.clsEmpleados;
 
 public class frmEmpleados extends javax.swing.JFrame {
 
-    private clsConexion objcnn = new clsConexion();
+   clsConexion objcnn = new clsConexion();
+   DefaultTableModel modelo;
+ 
     
-    private String[] cabecera = {"Codigo", "Nombres", "Ap_pat", "Ap_mat", "Area", "Cargo"};
-    DefaultTableModel model;
+   private String[] cabecera = {"Codigo", "Nombres", "Ap_pat", "Ap_mat", "Cargo", "Area"};
     
     public frmEmpleados() {
         initComponents();
@@ -28,33 +33,34 @@ public class frmEmpleados extends javax.swing.JFrame {
         btnEditar.setIcon(setIcono("/Imagenes/editar.png", btnEditar));
         btnEliminar.setIcon(setIcono("/Imagenes/Eliminar.png", btnEliminar));
         btnBuscar.setIcon(setIcono("/Imagenes/buscar.png", btnBuscar));
+        btnLimpiar.setIcon(setIcono("/Imagenes/limpiar.png", btnLimpiar));
     }
     
     
     void listar(int opcion){
-        model = new DefaultTableModel(null, cabecera);
-        jTable2.setModel(model);
+        modelo = new DefaultTableModel(null, cabecera);
+        TablaEmpleados.setModel(modelo);
         try {
             objcnn.mtdAbrirBD();
             switch (opcion){
                 case 1:
                     ArrayList<clsEmpleados> usu = objcnn.obtenerTodos();
                     for(clsEmpleados u:usu){
-                        model.addRow(new Object[]{
-                            u.getCodigo(), u.getNombre(), u.getAp_p(), u.getAp_m(), u.getArea_tra(), u.getCargo()
+                        modelo.addRow(new Object[]{
+                            u.getCodigo(), u.getNombre(), u.getAp_p(), u.getAp_m(), u.getArea_tra(), u.getCargo(),
                         });
                     }
                     break;
                 case 2:
                     String nombre = txtBuscar.getText();
                     clsEmpleados usr1 = objcnn.mtdBuscarRegistro(nombre);
-                    model.addRow(new Object[]{
-                        usr1.getCodigo(), usr1.getNombre(), usr1.getAp_p(), usr1.getAp_m(), usr1.getCargo(), usr1.getArea_tra()});
+                    modelo.addRow(new Object[]{
+                        usr1.getCodigo(), usr1.getNombre(), usr1.getAp_p(), usr1.getAp_m(), usr1.getCargo(), usr1.getArea_tra(),});
                     break;
         /*        case 3:
                     String nombre2 = txtNuevo.getText();
                     clsUsuario usr2 = objAccesoBD.mtdBuscarRegistro(nombre2);
-                    model.addRow(new Object[]{
+                    modelo.addRow(new Object[]{
                         usr2.getId(), usr2.getNombre(), usr2.getClave()
                     });
                     break;*/
@@ -69,6 +75,8 @@ public class frmEmpleados extends javax.swing.JFrame {
             Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+   
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -83,7 +91,8 @@ public class frmEmpleados extends javax.swing.JFrame {
         txtBuscar = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        TablaEmpleados = new javax.swing.JTable();
+        btnLimpiar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -186,7 +195,7 @@ public class frmEmpleados extends javax.swing.JFrame {
             }
         });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        TablaEmpleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -197,7 +206,17 @@ public class frmEmpleados extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(TablaEmpleados);
+
+        btnLimpiar.setBackground(new java.awt.Color(0, 51, 51));
+        btnLimpiar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnLimpiar.setForeground(new java.awt.Color(255, 255, 255));
+        btnLimpiar.setText("Limpiar Registro");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -213,6 +232,10 @@ public class frmEmpleados extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLimpiar)
+                .addGap(148, 148, 148))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,6 +246,8 @@ public class frmEmpleados extends javax.swing.JFrame {
                     .addComponent(btnBuscar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(btnLimpiar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -376,6 +401,11 @@ public class frmEmpleados extends javax.swing.JFrame {
         btnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -521,34 +551,26 @@ public class frmEmpleados extends javax.swing.JFrame {
         principal.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
 
-        /* Create and display the form */
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        txtCodigo.setText("");
+        txtDNI.setText("");
+        txtNombres.setText("");
+        txtAp_p.setText("");
+        txtAp_m.setText("");
+        txtDireccion.setText("");
+        txtCorreo.setText("");
+        txtTelefono.setText("");
+        txtSexo.setText("");
+        txtCargo.setText("");
+        txtAr_trab.setText("");
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    public static void main(String args[]) {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new frmEmpleados().setVisible(true);
@@ -562,12 +584,14 @@ public class frmEmpleados extends javax.swing.JFrame {
          boton.setIcon(icono);
          return icono;
     }
-
+        
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TablaEmpleados;
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -597,7 +621,6 @@ public class frmEmpleados extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JLabel labelEmpleado;
     private javax.swing.JTextField txtAp_m;
     private javax.swing.JTextField txtAp_p;
