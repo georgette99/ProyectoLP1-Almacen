@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import pckClases.clsClientes;
 import pckClases.clsEmpleados;
+import pckClases.clsFacturas;
 import pckClases.clsProveedores;
 import pckClases.clsInventario;
 
@@ -28,10 +29,10 @@ public class clsConexion {
     
     public void mtdAbrirBD () throws ClassNotFoundException{
       //strControlador = "com.mysql.jdbc.Driver";
-        strServer = "jdbc:mysql://localhost:3306/";
+       strServer = "jdbc:mysql://localhost:3306/";
         strBD = "bdalmacen";
         strUsuario = "root";
-        strPassword = "123";
+        strPassword = "vanessalp";
         
         try {
 
@@ -105,7 +106,7 @@ public class clsConexion {
         } catch (Exception e) {
             System.out.println("Error de apertura");
         }
-    }
+    }  
     public clsEmpleados mtdBuscarRegistro(String pDato) {
 	strSQL = "SELECT * FROM empleados WHERE Codigo = ?";
         clsEmpleados embqd = null;
@@ -452,4 +453,68 @@ public class clsConexion {
 	}
         return prbqd;
     }
+    //FACTURAS
+      public void mtdAgregarDatof ( String pFEmi_Salida, int pCodigo,int pcod_inven, int pIdfacsalida ){
+        strSQL = "INSERT INTO factura_salida(Fe_misalida, Codigo, codi_inven, Idfacsalida)"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement ps;
+                 
+        try {
+            ps = objcnn.prepareStatement(strSQL);
+            ps.setString(1, pFEmi_Salida);
+            ps.setInt(2, pCodigo);
+            ps.setInt(3, pcod_inven);
+            ps.setInt(4, pIdfacsalida);
+            
+            System.out.println("registro grabado");
+            ps.executeUpdate();
+            ps.close();
+        } 
+        catch (SQLException e) {
+            System.out.println("Error en escritura del registro");
+        }
+    }
+       public void mtdObtenerDatosTablaf(){
+        strSQL = "SELECT * FROM factura_salida";
+        PreparedStatement st;
+        
+        try {
+            st = objcnn.prepareStatement(strSQL);
+           
+            objRst = st.executeQuery();
+            System.out.println("Apertura exitosa de la tabla");
+            st.close();
+        } catch (Exception e) {
+            System.out.println("Error de apertura");
+        }
+    } 
+    
+    public ArrayList<clsFacturas> obtenerTodosf(){
+        ArrayList<clsFacturas> list = new ArrayList();
+        String SQL = "SELECT * FROM factura_salida";
+        PreparedStatement ps;
+        ResultSet rs;
+        clsFacturas us;
+        
+        try {
+            ps= objcnn.prepareStatement(SQL);
+            rs= ps.executeQuery();
+            
+            while(rs.next()){
+                us = new clsFacturas();
+                us.setIdfasalida(rs.getInt("IDFACTURA"));
+               us.setCodigo(rs.getInt("CLIENTE"));
+               us.setCod_inven(rs.getInt("INVENTARIO"));
+               us.setFEmi_Salida(rs.getString("FECHA"));
+                list.add(us);
+            }
+            ps.close();
+            rs.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(clsConexion.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return list;
+    }
+    
 }

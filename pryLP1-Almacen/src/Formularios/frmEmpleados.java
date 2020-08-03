@@ -276,6 +276,12 @@ public class frmEmpleados extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel7.setText("Direccion:");
 
+        txtCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoActionPerformed(evt);
+            }
+        });
+
         txtAp_p.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtAp_pActionPerformed(evt);
@@ -568,6 +574,10 @@ public class frmEmpleados extends javax.swing.JFrame {
         txtCargo.setText("");
         txtAr_trab.setText("");
     }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoActionPerformed
 
     public static void main(String args[]) {
 
