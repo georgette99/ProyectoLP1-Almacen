@@ -25,22 +25,19 @@ public class frmInventario extends javax.swing.JFrame {
         initComponents();
         listar(1);
         setLocationRelativeTo(this);
-        //Fuente Inventario
-        Font fuente1 = new Font("Yellow Rabbit - Personal Use", 0, 72);
-        labelInventario.setFont(fuente1);
-        labelInventario.setForeground(Color.WHITE);
-        
+
         btnAgregar.setIcon(setIcono("/Imagenes/Agregar.png", btnAgregar));
         btnEditar.setIcon(setIcono("/Imagenes/editar.png", btnEditar));
         btnEliminar.setIcon(setIcono("/Imagenes/Eliminar.png", btnEliminar));
         btnBuscar.setIcon(setIcono("/Imagenes/buscar.png", btnBuscar));
+        btnLimpiar.setIcon(setIcono("/Imagenes/limpiar.png", btnLimpiar));
        
 
     }
     
     void listar(int opcion){
         model = new DefaultTableModel(null, cabecera);
-        jTable1.setModel(model);
+        TablaInventario.setModel(model);
         try {
             objcon.mtdAbrirBD();
             switch (opcion){
@@ -86,6 +83,7 @@ public class frmInventario extends javax.swing.JFrame {
         jTextField7 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
+        btnLimpiar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -107,8 +105,7 @@ public class frmInventario extends javax.swing.JFrame {
         txtBuscarInv = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        btnLimpiar = new javax.swing.JButton();
+        TablaInventario = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         labelInventario = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -123,6 +120,13 @@ public class frmInventario extends javax.swing.JFrame {
         jTextField7.setText("jTextField7");
 
         jScrollPane2.setViewportView(jEditorPane1);
+
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 153, 255));
@@ -174,6 +178,11 @@ public class frmInventario extends javax.swing.JFrame {
         btnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -267,7 +276,7 @@ public class frmInventario extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TablaInventario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -279,12 +288,15 @@ public class frmInventario extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable1.setGridColor(new java.awt.Color(51, 0, 51));
-        jTable1.setSelectionBackground(new java.awt.Color(153, 102, 255));
-        jTable1.setSelectionForeground(new java.awt.Color(0, 0, 0));
-        jScrollPane1.setViewportView(jTable1);
-
-        btnLimpiar.setText("Limpiar");
+        TablaInventario.setGridColor(new java.awt.Color(51, 0, 51));
+        TablaInventario.setSelectionBackground(new java.awt.Color(153, 102, 255));
+        TablaInventario.setSelectionForeground(new java.awt.Color(0, 0, 0));
+        TablaInventario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaInventarioMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(TablaInventario);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -301,10 +313,6 @@ public class frmInventario extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 9, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLimpiar)
-                .addGap(192, 192, 192))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -314,9 +322,7 @@ public class frmInventario extends javax.swing.JFrame {
                     .addComponent(btnBuscar)
                     .addComponent(txtBuscarInv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(69, 69, 69)
-                .addComponent(btnLimpiar)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(110, 110, 110))
         );
 
@@ -467,6 +473,48 @@ public class frmInventario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+ 
+    private void TablaInventarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaInventarioMouseClicked
+        int filaseleccionada = TablaInventario.getSelectedRow();
+        
+        txtCinv.setText(String.valueOf(TablaInventario.getValueAt(filaseleccionada, 0)));
+        txtStock.setText(String.valueOf(TablaInventario.getValueAt(filaseleccionada, 1)));
+        txtDescripcion.setText(String.valueOf(TablaInventario.getValueAt(filaseleccionada, 2)));
+        txtPrecio.setText(String.valueOf(TablaInventario.getValueAt(filaseleccionada, 3)));
+        txtLinea.setText(String.valueOf(TablaInventario.getValueAt(filaseleccionada, 4)));
+        
+    }//GEN-LAST:event_TablaInventarioMouseClicked
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        try {
+           objcon.mtdAbrirBD();
+           objcon.mtdObtenerProd();
+           
+           String Criterio;
+           
+           Criterio = txtCinv.getText();
+
+           objcon.mtdEliminarProducto(Criterio);
+           objcon.mtdCerrarBD();
+       } 
+       
+       catch (Exception e) {
+           System.out.println("No se pudo eliminar correctamente");
+       }
+       listar(1);
+       limpiar();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+    void limpiar(){
+        txtBuscarInv.setText("");
+        txtCinv.setText("");
+        txtDescripcion.setText("");
+        txtPrecio.setText("");
+        txtLinea.setText("");
+        txtUnidad.setText("");
+    }
     /**
      * @param args the command line arguments
      */
@@ -510,6 +558,7 @@ public class frmInventario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TablaInventario;
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEditar;
@@ -536,7 +585,6 @@ public class frmInventario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JLabel labelInventario;
     private javax.swing.JTextField txtBuscarInv;

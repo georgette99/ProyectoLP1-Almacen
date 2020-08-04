@@ -20,7 +20,7 @@ public class clsProveedores {
         return Nombre;
     }
 
-    public void setNombre(String Dni) {
+    public void setNombre(String Nombre) {
         this.Nombre= Nombre;
     }
 
@@ -28,7 +28,7 @@ public class clsProveedores {
         return Direccion;
     }
 
-    public void setDireccion(String direccion) {
+    public void setDireccion(String Direccion) {
         this.Direccion = Direccion;
     }
 
@@ -36,7 +36,7 @@ public class clsProveedores {
         return Correo;
     }
 
-    public void setCorreo(String correo) {
+    public void setCorreo(String Correo) {
         this.Correo = Correo;
     }
 
@@ -44,7 +44,7 @@ public class clsProveedores {
         return Telefono;
     }
 
-    public void setTelefono(String telefono) {
+    public void setTelefono(String Telefono) {
         this.Telefono = Telefono;
     }
 }

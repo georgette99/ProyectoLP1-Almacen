@@ -5,17 +5,19 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import pckClases.clsClientes;
 import pckClases.clsEmpleados;
 import pckClases.clsFacturas;
 import pckClases.clsProveedores;
 import pckClases.clsInventario;
+import pckClases.clsUsuarios;
 
 public class clsConexion {
     
-    private Connection objcnn = null;
-    private Statement objStt = null;
-    private ResultSet objRst = null;
+    Connection objcnn = null;
+    Statement objStt = null;
+    ResultSet objRst = null;
     
     //Variables de identificación de la BD
     private String strServer = null;
@@ -27,12 +29,24 @@ public class clsConexion {
     private String strControlador = null;
     private String strSQL = null;
     
+    public Connection getConnection(){
+        return objcnn;
+    }
+    
+    public Statement getStatement(){
+        return objStt;
+    }
+    
+    public ResultSet getResultSet(){
+        return objRst;
+    }
+    
     public void mtdAbrirBD () throws ClassNotFoundException{
       //strControlador = "com.mysql.jdbc.Driver";
        strServer = "jdbc:mysql://localhost:3306/";
         strBD = "bdalmacen";
         strUsuario = "root";
-        strPassword = "vanessalp";
+        strPassword = "123";
         
         try {
 
@@ -172,6 +186,17 @@ public class clsConexion {
         } 
         return list;
     }
+    public void mtdEliminarDatoEmpleados(String pCodigo){
+        strSQL = "DELETE FROM empleados WHERE Codigo = '" + pCodigo + "'".trim();
+        try{
+            objStt = objcnn.createStatement();
+            objStt.execute(strSQL); //INSERT ...
+            System.out.println("Registro eliminado");
+        }
+        catch(SQLException eSQL){
+            System.out.println("ERROR en la eliminacion: " + eSQL );
+        }
+    }
     
     //CLIENTES
     public void mtdAgregarDatoCliente ( String pCodigo, String pRUC, String pNombre,  String pDireccion, 
@@ -266,6 +291,31 @@ public class clsConexion {
         } 
         return list;
     }
+    public void mtdModificarDatoCliente(String pCodigo, String pRUC, String pNombre, String pDireccion, String pTelefono, String pCorreo){
+        strSQL = "UPDATE clientes set RUC='" + pRUC + "',Nombre='" + pNombre + "', "
+                + "Direccion ='" +pDireccion +"', Telefono = '" + pTelefono +"', "
+                + "Correo ='" +pCorreo+ "' WHERE Id=" + pCodigo;
+        try {
+            objStt = objcnn.prepareStatement(strSQL);
+            objStt.execute( strSQL ); // INSERT ...
+            System.out.println("Registro grabado");
+        }
+        catch(SQLException eSQL){
+            System.out.println("Error en la modificacio + eSQL");
+        }
+    }
+    
+    public void mtdEliminarDatoCliente(String pCodigo){
+        strSQL = "DELETE FROM clientes WHERE Codigo = '" + pCodigo + "'".trim();
+        try{
+            objStt = objcnn.createStatement();
+            objStt.execute(strSQL); //INSERT ...
+            System.out.println("Registro eliminado");
+        }
+        catch(SQLException eSQL){
+            System.out.println("ERROR en la eliminacion: " + eSQL );
+        }
+    }
     
     //PROVEEDORES
     public void mtdAgregarDatoProveedores (String pCodigo, String pNombre, String pDireccion, String pTelefono, String pCorreo){
@@ -356,6 +406,17 @@ public class clsConexion {
         } 
         return list;
     }
+    public void mtdEliminarDatoProveedores(String pCodigo){
+        strSQL = "DELETE FROM proveedores WHERE Codigo = '" + pCodigo + "'".trim();
+        try{
+            objStt = objcnn.createStatement();
+            objStt.execute(strSQL); //INSERT ...
+            System.out.println("Registro eliminado");
+        }
+        catch(SQLException eSQL){
+            System.out.println("ERROR en la eliminacion: " + eSQL );
+        }
+    }
     
     //INVENTARIO
     public ArrayList<clsInventario> obtenerDatos(){
@@ -387,7 +448,6 @@ public class clsConexion {
         } 
         return list;
     }
-    
     public void mtdAgregarProducto (String pCodIn, String pStock, String pDescripcion, String pPrecio,
                                  String pLinea, String pUnidad){
         strSQL = "INSERT INTO inventario VALUES (?, ?, ?, ?, ?, ?)";
@@ -410,7 +470,6 @@ public class clsConexion {
             System.out.println( "error " + e.getMessage());
         }
     }
-    
     public void mtdObtenerProd(){
         strSQL = "SELECT * FROM inventario";
         PreparedStatement st;
@@ -425,7 +484,6 @@ public class clsConexion {
             System.out.println("Error de apertura");
         }
     }
-    
     public clsInventario mtdBuscarProducto(String pDato) {
 	strSQL = "SELECT * FROM inventario WHERE Cod_Inv = ?";
         clsInventario prbqd = null;
@@ -453,10 +511,22 @@ public class clsConexion {
 	}
         return prbqd;
     }
+    public void mtdEliminarProducto(String pCodigo){
+        strSQL = "DELETE FROM inventario WHERE Codigo = '" + pCodigo + "'".trim();
+        try{
+            objStt = objcnn.createStatement();
+            objStt.execute(strSQL); //INSERT ...
+            System.out.println("Registro eliminado");
+        }
+        catch(SQLException eSQL){
+            System.out.println("ERROR en la eliminacion: " + eSQL );
+        }
+    }
+
     //FACTURAS
-      public void mtdAgregarDatof ( String pFEmi_Salida, int pCodigo,int pcod_inven, int pIdfacsalida ){
-        strSQL = "INSERT INTO factura_salida(Fe_misalida, Codigo, codi_inven, Idfacsalida)"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public void mtdAgregarDatof ( String pFEmi_Salida, int pCodigo,int pcod_inven, int pIdfacsalida ){
+        strSQL = "INSERT INTO factura_salida"
+                + "VALUES (?, ?, ?, ?)";
         PreparedStatement ps;
                  
         try {
@@ -474,7 +544,7 @@ public class clsConexion {
             System.out.println("Error en escritura del registro");
         }
     }
-       public void mtdObtenerDatosTablaf(){
+    public void mtdObtenerDatosTablaf(){
         strSQL = "SELECT * FROM factura_salida";
         PreparedStatement st;
         
@@ -515,6 +585,105 @@ public class clsConexion {
             Logger.getLogger(clsConexion.class.getName()).log(Level.SEVERE, null, ex);
         } 
         return list;
+    }
+    
+    //USUARIOS
+    
+    public void mtdAgregarDatoUsuarios ( String pID, String pClave, String pUsuario,  String pCorreo){
+        strSQL = "INSERT INTO usuarios VALUES(?, ?, ?, ?)";
+        PreparedStatement ps;
+                 
+        try {
+            ps = objcnn.prepareStatement(strSQL);
+            ps.setString(1, pID);
+            ps.setString(2, pClave);
+            ps.setString(3, pUsuario);
+            ps.setString(4, pCorreo);
+           
+            System.out.println("registro grabado");
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception e) {
+            System.out.println("Error en escritura del registro");
+        }
+    }
+    public void mtdObtenerDatosTablaUsuarios(){
+        strSQL = "SELECT *FROM usuarios";
+        PreparedStatement st;
+        
+        try {
+            st = objcnn.prepareStatement(strSQL);
+            objRst = st.executeQuery();
+            System.out.println("Apertura exitosa de la tabla");
+            st.close();
+        } catch (Exception e) {
+            System.out.println("Error de apertura");
+        }
+    }
+    public clsUsuarios mtdBuscarRegistroUsuario(String pDato){
+        strSQL = "SELECT * FROM usuarios WHERE ID = ?";
+        clsUsuarios usuario = null;
+	PreparedStatement ps;
+	try {
+		ps = objcnn.prepareStatement(strSQL);
+		ps.setString(1, pDato);
+
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+                        usuario = new clsUsuarios();
+                    
+			usuario.setID(rs.getString("ID"));
+                        usuario.setClave(rs.getString("Clave"));
+			usuario.setUsuario(rs.getString("Usuario"));
+                        usuario.setCorreo(rs.getString("Correo"));
+                        
+                       
+		}
+		rs.close();
+		ps.close();
+	} catch(Exception e) {
+		System.out.println(e.getMessage());
+	}
+        return usuario;
+    }  
+    public ArrayList<clsUsuarios> obtenerTodosUsuarios(){
+        ArrayList<clsUsuarios> list = new ArrayList();
+        String SQL = "SELECT * FROM usuarios ";
+        PreparedStatement ps;
+        ResultSet rs;
+        clsUsuarios us;
+        
+        try {
+            ps= objcnn.prepareStatement(SQL);
+            rs= ps.executeQuery();
+            
+            while(rs.next()){
+                us = new clsUsuarios();
+                us.setID(rs.getString("Codigo"));
+                us.setClave(rs.getString("Clave"));
+                us.setUsuario(rs.getString("Usuario"));
+                us.setCorreo(rs.getString("Correo"));
+                list.add(us);
+            }
+            ps.close();
+            rs.close();
+
+        } catch (Exception ex) {
+            Logger.getLogger(clsConexion.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return list;
+    }
+    
+    public void mtdEliminarDatoUsuario(String pCodigo){
+        strSQL = "DELETE FROM usuarios WHERE Codigo = '" + pCodigo + "'".trim();
+        try{
+            objStt = objcnn.createStatement();
+            objStt.execute(strSQL); //INSERT ...
+            System.out.println("Registro eliminado");
+        }
+        catch(SQLException eSQL){
+            System.out.println("ERROR en la eliminacion: " + eSQL );
+        }
     }
     
 }

@@ -206,6 +206,11 @@ public class frmEmpleados extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        TablaEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaEmpleadosMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(TablaEmpleados);
 
         btnLimpiar.setBackground(new java.awt.Color(0, 51, 51));
@@ -558,7 +563,23 @@ public class frmEmpleados extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+          try {
+           objcnn.mtdAbrirBD();
+           objcnn.mtdObtenerDatosTabla();
+           
+           String Criterio;
+           
+           Criterio = txtCodigo.getText();
 
+           objcnn.mtdEliminarDatoEmpleados(Criterio);
+           objcnn.mtdCerrarBD();
+       } 
+       
+       catch (Exception e) {
+           System.out.println("No se pudo eliminar correctamente");
+       }
+       listar(1);
+       limpiar();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -579,6 +600,18 @@ public class frmEmpleados extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodigoActionPerformed
 
+    private void TablaEmpleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaEmpleadosMouseClicked
+        int filaseleccionada = TablaEmpleados.getSelectedRow();
+        
+        txtCodigo.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 0)));
+        txtNombres.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 1)));
+        txtAp_p.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 2)));
+        txtAp_m.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 3)));
+        txtCargo.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 4)));
+        txtAr_trab.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 5)));
+        
+    }//GEN-LAST:event_TablaEmpleadosMouseClicked
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -593,6 +626,20 @@ public class frmEmpleados extends javax.swing.JFrame {
          ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
          boton.setIcon(icono);
          return icono;
+    }
+    
+    void limpiar(){
+        txtCodigo.setText("");
+        txtAp_p.setText("");
+        txtAp_m.setText("");
+        txtNombres.setText("");
+        txtDireccion.setText("");
+        txtTelefono.setText("");
+        txtCorreo.setText("");
+        txtCargo.setText("");
+        txtSexo.setText("");
+        txtDNI.setText("");
+        txtTelefono.setText("");
     }
         
     // Variables declaration - do not modify//GEN-BEGIN:variables

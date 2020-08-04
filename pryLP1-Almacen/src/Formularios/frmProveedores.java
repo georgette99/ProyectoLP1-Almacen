@@ -165,6 +165,11 @@ public class frmProveedores extends javax.swing.JFrame {
         btnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -270,6 +275,11 @@ public class frmProveedores extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        TablaProveedores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaProveedoresMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(TablaProveedores);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -391,6 +401,36 @@ public class frmProveedores extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    private void TablaProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaProveedoresMouseClicked
+        int filaseleccionada = TablaProveedores.getSelectedRow();
+        
+        txtCodigo.setText(String.valueOf(TablaProveedores.getValueAt(filaseleccionada, 0)));
+        txtNombre.setText(String.valueOf(TablaProveedores.getValueAt(filaseleccionada, 1)));
+        txtDireccion.setText(String.valueOf(TablaProveedores.getValueAt(filaseleccionada, 2)));
+        txtTelefono.setText(String.valueOf(TablaProveedores.getValueAt(filaseleccionada, 3)));
+        txtCorreo.setText(String.valueOf(TablaProveedores.getValueAt(filaseleccionada, 4)));
+    }//GEN-LAST:event_TablaProveedoresMouseClicked
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        try {
+           objcnn.mtdAbrirBD();
+           objcnn.mtdObtenerDatosTablaProveedores();
+           
+           String Criterio;
+           
+           Criterio = txtCodigo.getText();
+
+           objcnn.mtdEliminarDatoProveedores(Criterio);
+           objcnn.mtdCerrarBD();
+       } 
+       
+       catch (Exception e) {
+           System.out.println("No se pudo eliminar correctamente");
+       }
+       listar(1);
+       limpiar();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -430,6 +470,14 @@ public class frmProveedores extends javax.swing.JFrame {
          ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
          boton.setIcon(icono);
          return icono;
+    }
+      
+      void limpiar(){
+        txtCodigo.setText("");
+        txtNombre.setText("");
+        txtDireccion.setText("");
+        txtTelefono.setText("");
+        txtCorreo.setText("");
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TablaProveedores;

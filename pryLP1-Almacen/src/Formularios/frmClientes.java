@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import pckClases.clsClientes;
 
@@ -20,8 +21,6 @@ public final class frmClientes extends javax.swing.JFrame {
    clsConexion objcnn = new clsConexion();
    Connection con;
    DefaultTableModel modelo;
-   Statement st;
-   ResultSet rs;
     
    private String[] cabecera = {"Codigo", "RUC", "Nombre", "Direccion", "Telefono", "Correo"};
     
@@ -160,7 +159,11 @@ public final class frmClientes extends javax.swing.JFrame {
 
         jLabel1.setText("Nombre:");
 
-        txtRUC.setText("b");
+        txtRUC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRUCActionPerformed(evt);
+            }
+        });
 
         jPanel4.setBackground(new java.awt.Color(255, 204, 102));
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Opciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
@@ -175,9 +178,19 @@ public final class frmClientes extends javax.swing.JFrame {
 
         btnEditar.setBackground(new java.awt.Color(204, 153, 0));
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setBackground(new java.awt.Color(204, 153, 0));
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -294,6 +307,11 @@ public final class frmClientes extends javax.swing.JFrame {
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
+        TablaClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaClientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(TablaClientes);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -393,6 +411,7 @@ public final class frmClientes extends javax.swing.JFrame {
         }
         
         listar(1);
+        limpiar();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -438,6 +457,76 @@ public final class frmClientes extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_TablaClientesAncestorAdded
 
+    private void TablaClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaClientesMouseClicked
+                 int row = TablaClientes.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "No se Selecciono");
+        } else {
+            int Codigo = Integer.parseInt((String) TablaClientes.getValueAt(row, 0).toString());
+            String RUC = (String) TablaClientes.getValueAt(row, 1);
+            String Nombre = (String) TablaClientes.getValueAt(row, 2);
+            String Direccion = (String) TablaClientes.getValueAt(row, 3);
+            String Telefono = (String) TablaClientes.getValueAt(row, 4);
+            String Correo = (String) TablaClientes.getValueAt(row, 5);
+            txtCodigo.setText("" +Codigo);
+            txtRUC.setText(RUC);
+            txtNombre.setText(Nombre);
+            txtDireccion.setText(Direccion);
+            txtTelefono.setText(Telefono);
+            txtCorreo.setText(Correo);
+
+        }
+    }//GEN-LAST:event_TablaClientesMouseClicked
+
+    private void txtRUCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRUCActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRUCActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        try {
+           objcnn.mtdAbrirBD();
+           objcnn.mtdObtenerDatosTabla();
+           
+           String Codigo, RUC, Nombre, Direccion, Telefono, Correo;
+           
+           Codigo = txtCodigo.getText();
+           RUC = txtRUC.getText();
+           Nombre = txtNombre.getText();
+           Direccion = txtDireccion.getText();
+           Telefono = txtTelefono.getText();
+           Correo = txtCorreo.getText();
+           objcnn.mtdModificarDatoCliente(Codigo, RUC, Nombre, Direccion, Telefono, Correo);
+           objcnn.mtdCerrarBD();
+       } 
+       
+       catch (Exception e) {
+           System.out.println("No se pudo actualizar correctamente");
+       }
+        limpiar();
+        listar(1);
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        
+        try {
+           objcnn.mtdAbrirBD();
+           objcnn.mtdObtenerDatosTablaClientes();
+           
+           String Criterio;
+           
+           Criterio = txtCodigo.getText();
+
+           objcnn.mtdEliminarDatoCliente(Criterio);
+           objcnn.mtdCerrarBD();
+       } 
+       
+       catch (Exception e) {
+           System.out.println("No se pudo eliminar correctamente");
+       }
+       listar(1);
+       limpiar();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+    
     public Icon setIcono(String url, JButton boton){
          ImageIcon icon = new ImageIcon(getClass().getResource(url));
          ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
@@ -445,6 +534,14 @@ public final class frmClientes extends javax.swing.JFrame {
          return icono;
     }
     
+    void limpiar(){
+        txtCodigo.setText("");
+        txtRUC.setText("");
+        txtNombre.setText("");
+        txtDireccion.setText("");
+        txtTelefono.setText("");
+        txtCorreo.setText("");
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TablaClientes;
