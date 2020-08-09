@@ -1,8 +1,8 @@
-
 package pckClases;
 
 public class clsUsuarios {
-    String ID, Clave, Usuario, Correo;
+
+    String ID, Clave, Usuario, Tipo, Correo;
 
     public String getID() {
         return ID;
@@ -35,5 +35,5 @@ public class clsUsuarios {
     public void setCorreo(String Correo) {
         this.Correo = Correo;
     }
-    
+
 }

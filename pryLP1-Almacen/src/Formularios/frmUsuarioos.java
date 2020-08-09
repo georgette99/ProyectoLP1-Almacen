@@ -18,7 +18,7 @@ public class frmUsuarioos extends javax.swing.JFrame {
    Connection con;
    DefaultTableModel modelo;
     
-   private String[] cabecera = {"ID", "Usuario", "Correo"};
+   private String[] cabecera = {"ID","Clave", "Usuario", "Correo"};
     
     public frmUsuarioos() {
         initComponents();
@@ -41,7 +41,7 @@ public class frmUsuarioos extends javax.swing.JFrame {
                     ArrayList<clsUsuarios> usu = objcnn.obtenerTodosUsuarios();
                     for(clsUsuarios u:usu){
                         modelo.addRow(new Object[]{
-                            u.getID(), u.getUsuario(),u.getCorreo(),
+                            u.getID(), u.getClave() ,u.getUsuario(),u.getCorreo(),
                         });
                     }
                     break;
@@ -49,7 +49,7 @@ public class frmUsuarioos extends javax.swing.JFrame {
                     String ID = txtBuscar.getText();
                     clsUsuarios usr1 = objcnn.mtdBuscarRegistroUsuario(ID);
                     modelo.addRow(new Object[]{
-                        usr1.getID(), usr1.getUsuario(), usr1.getCorreo()});
+                        usr1.getID(), usr1.getClave() ,usr1.getUsuario(), usr1.getCorreo()});
                     break;
         /*        case 3:
                     String nombre2 = txtNuevo.getText();
@@ -66,7 +66,7 @@ public class frmUsuarioos extends javax.swing.JFrame {
             
             objcnn.mtdCerrarBD();
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(frmUsuarioos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -124,7 +124,7 @@ public class frmUsuarioos extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(270, 270, 270)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -330,7 +330,7 @@ public class frmUsuarioos extends javax.swing.JFrame {
             
             objcnn.mtdCerrarBD();
         } catch (Exception e) {
-            System.out.println("Error" + e );
+            System.out.println("Error" + e.getMessage() );
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -349,6 +349,7 @@ public class frmUsuarioos extends javax.swing.JFrame {
             objcnn.mtdAgregarDatoUsuarios(ID, Clave, Usuario, Correo);
             objcnn.mtdCerrarBD();
         } catch (Exception e) {
+            System.out.println(" "+ e.getMessage());
         }
         
         listar(1);

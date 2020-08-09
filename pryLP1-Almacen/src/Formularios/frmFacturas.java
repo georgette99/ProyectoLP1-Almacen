@@ -19,7 +19,7 @@ public class frmFacturas extends javax.swing.JFrame {
 public frmFacturas() {
         initComponents();
         
-       
+       listar1(1);
     }
 
 void listar1(int opcion){
@@ -32,7 +32,7 @@ void listar1(int opcion){
                     ArrayList<clsFacturas> usu = objcnn.obtenerTodosf();
                     for(clsFacturas u:usu){
                         modelof.addRow(new Object[]{
-                            u.getIdfasalida(), u.getCodigo(), u.getCod_inven(), u.getFEmi_Salida()
+                            u.getIdfacsalida(), u.getCodigo(), u.getCodi_inven(), u.getFEmi_Salida()
                         });
                     }
                     break;

@@ -46,7 +46,7 @@ public class clsConexion {
        strServer = "jdbc:mysql://localhost:3306/";
         strBD = "bdalmacen";
         strUsuario = "root";
-        strPassword = "123";
+        strPassword = "vanessalp";
         
         try {
 
@@ -524,8 +524,8 @@ public class clsConexion {
     }
 
     //FACTURAS
-    public void mtdAgregarDatof ( String pFEmi_Salida, int pCodigo,int pcod_inven, int pIdfacsalida ){
-        strSQL = "INSERT INTO factura_salida"
+    public void mtdAgregarDatof ( String pFEmi_Salida, int pCodigo,int pcodi_inven, int pIdfacsalida ){
+        strSQL = "INSERT INTO factura_salida (FEmi_Salida , Codigo , codi_inven , Idfacsalida)"
                 + "VALUES (?, ?, ?, ?)";
         PreparedStatement ps;
                  
@@ -533,7 +533,7 @@ public class clsConexion {
             ps = objcnn.prepareStatement(strSQL);
             ps.setString(1, pFEmi_Salida);
             ps.setInt(2, pCodigo);
-            ps.setInt(3, pcod_inven);
+            ps.setInt(3, pcodi_inven);
             ps.setInt(4, pIdfacsalida);
             
             System.out.println("registro grabado");
@@ -541,7 +541,7 @@ public class clsConexion {
             ps.close();
         } 
         catch (SQLException e) {
-            System.out.println("Error en escritura del registro");
+            System.out.println("Error en escritura del registro" + e.getMessage());
         }
     }
     public void mtdObtenerDatosTablaf(){
@@ -572,10 +572,10 @@ public class clsConexion {
             
             while(rs.next()){
                 us = new clsFacturas();
-                us.setIdfasalida(rs.getInt("IDFACTURA"));
-               us.setCodigo(rs.getInt("CLIENTE"));
-               us.setCod_inven(rs.getInt("INVENTARIO"));
-               us.setFEmi_Salida(rs.getString("FECHA"));
+                us.setIdfacsalida(rs.getString("Idfacsalida"));
+               us.setCodigo(rs.getString("Codigo"));
+               us.setCodi_inven(rs.getString("codi_inven"));
+               us.setFEmi_Salida(rs.getString("FEmi_Salida"));
                 list.add(us);
             }
             ps.close();
@@ -590,7 +590,7 @@ public class clsConexion {
     //USUARIOS
     
     public void mtdAgregarDatoUsuarios ( String pID, String pClave, String pUsuario,  String pCorreo){
-        strSQL = "INSERT INTO usuarios VALUES(?, ?, ?, ?)";
+        strSQL = "INSERT INTO usuarios (ID , Clave , Usuario , Correo)VALUES(?, ?, ?, ?)";
         PreparedStatement ps;
                  
         try {
@@ -604,11 +604,11 @@ public class clsConexion {
             ps.executeUpdate();
             ps.close();
         } catch (Exception e) {
-            System.out.println("Error en escritura del registro");
+            System.out.println("Error en escritura del registro" +e.getMessage());
         }
     }
     public void mtdObtenerDatosTablaUsuarios(){
-        strSQL = "SELECT *FROM usuarios";
+        strSQL = "SELECT * FROM usuarios ";
         PreparedStatement st;
         
         try {
@@ -631,12 +631,11 @@ public class clsConexion {
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()){
                         usuario = new clsUsuarios();
-                    
 			usuario.setID(rs.getString("ID"));
                         usuario.setClave(rs.getString("Clave"));
 			usuario.setUsuario(rs.getString("Usuario"));
                         usuario.setCorreo(rs.getString("Correo"));
-                        
+                      
                        
 		}
 		rs.close();
@@ -659,7 +658,7 @@ public class clsConexion {
             
             while(rs.next()){
                 us = new clsUsuarios();
-                us.setID(rs.getString("Codigo"));
+                us.setID(rs.getString("ID"));
                 us.setClave(rs.getString("Clave"));
                 us.setUsuario(rs.getString("Usuario"));
                 us.setCorreo(rs.getString("Correo"));
@@ -685,5 +684,27 @@ public class clsConexion {
             System.out.println("ERROR en la eliminacion: " + eSQL );
         }
     }
-    
+    // loggin
+            
+    public int mtdLogin(String nombre, String clave){
+        String strSQL3 = "SELECT * FROM tb_usuarios WHERE usu_nombre = ? AND usu_clave = ?";      
+	PreparedStatement ps;
+        int salida = -1;
+	try {
+		ps = objcnn.prepareStatement(strSQL3);
+		ps.setString(1, nombre);
+                ps.setString(2, clave);
+
+		ResultSet rs = ps.executeQuery();
+		if(rs.next()){
+                    salida =1;
+                }
+		rs.close();
+		ps.close();
+	} catch(Exception e) {
+		System.out.println(e.getMessage());
+	}
+        return salida;
+    }
 }
+

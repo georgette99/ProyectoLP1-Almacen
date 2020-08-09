@@ -20,7 +20,7 @@ public class frmLogin extends javax.swing.JFrame {
         btnCancelar.setIcon(setIcono("/Imagenes/IconCancelar.png", btnCancelar));
     }
     
-    /*void listar(){
+    void listar(){
     try{
         con.mtdAbrirBD();
         String usuario = txtUsuario.getText();
@@ -44,7 +44,7 @@ public class frmLogin extends javax.swing.JFrame {
     catch(Exception e){
         Logger.getLogger(frmLogin.class.getName()).log(Level.SEVERE, null, e);
     }
-}*/
+}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
