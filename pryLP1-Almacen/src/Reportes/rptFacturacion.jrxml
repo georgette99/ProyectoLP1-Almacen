@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptFacturacion" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cda924e1-5b50-476f-a4ae-ce02b7bd8733">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="164"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#006666"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#C3CFD9">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#006666"/>
+			<bottomPen lineWidth="0.5" lineColor="#006666"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#E6F3FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#006666"/>
+			<bottomPen lineWidth="0.5" lineColor="#006666"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#006666"/>
+			<bottomPen lineWidth="0.5" lineColor="#006666"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="ec9587dd-d44e-4991-bace-b87c5ff8fe6d"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="146" splitType="Stretch">
+			<staticText>
+				<reportElement x="24" y="31" width="280" height="65" uuid="ea1b1d48-e0da-423a-9f81-fa9ba02905de"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Yellow Rabbit - Personal Use" size="36" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[ RGVS ALMACENES S.A.C.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="61" y="104" width="207" height="20" uuid="369b38b3-922c-4e6c-a595-8ccb10a06369"/>
+				<text><![CDATA[Ventas al por mayor de todo tipo de ropa, ]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="353" y="26" width="177" height="98" uuid="d2789dd1-3bc7-439e-b8d8-dcd5f372e159"/>
+				<box>
+					<pen lineWidth="1.25" lineColor="#000000"/>
+					<topPen lineWidth="1.25" lineColor="#000000"/>
+					<leftPen lineWidth="1.25" lineColor="#000000"/>
+					<bottomPen lineWidth="1.25" lineColor="#000000"/>
+					<rightPen lineWidth="1.25" lineColor="#000000"/>
+				</box>
+				<staticText>
+					<reportElement x="15" y="14" width="39" height="20" uuid="e45da10e-d65e-464c-b12a-b996c2561927"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[R.U.C. ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="66" y="14" width="100" height="20" uuid="229a3ddb-9530-4699-9434-7b357d320ccd"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[20606175789]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="54" y="34" width="71" height="25" uuid="cfca2783-d90f-492f-a132-45439aec9c58"/>
+					<textElement verticalAlignment="Middle">
+						<font size="14" isBold="true" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[FACTURA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="27" y="70" width="75" height="20" uuid="c5a06aa9-d970-4f72-9cda-d8f274243494"/>
+					<textElement>
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nro.Factura  :]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement x="365" y="31" width="54" height="20" uuid="f5e46aca-d484-4a3a-a22a-5213c8b178c5"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="11" width="58" height="20" uuid="940e9b90-3337-4ad6-a29d-8d03714a2966"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLIENTE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="365" y="11" width="54" height="20" uuid="9b40e411-64e3-4ba3-bb1b-e3e59f7380b1"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[R.U.C.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="37" y="31" width="70" height="20" uuid="84439ddd-60d2-4e2a-b54a-8c9856541378"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TELÉFONO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="38" y="51" width="69" height="20" uuid="a1cbcff1-ef7a-4588-8432-eba9baa6f3d6"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCIÓN:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="184" splitType="Stretch">
+			<staticText>
+				<reportElement x="38" y="12" width="83" height="20" uuid="43e48810-b9ad-4e3f-a835-5b53d8bbdbf1"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#0099FF"/>
+					<topPen lineWidth="0.75" lineColor="#0099FF"/>
+					<leftPen lineWidth="0.75" lineColor="#0099FF"/>
+					<bottomPen lineWidth="0.75" lineColor="#0099FF"/>
+					<rightPen lineWidth="0.75" lineColor="#0099FF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CANTIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="121" y="12" width="183" height="20" uuid="dabb60d7-3a94-4d35-9023-676ed50e0e6e"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#0099FF"/>
+					<topPen lineWidth="0.75" lineColor="#0099FF"/>
+					<leftPen lineWidth="0.75" lineColor="#0099FF"/>
+					<bottomPen lineWidth="0.75" lineColor="#0099FF"/>
+					<rightPen lineWidth="0.75" lineColor="#0099FF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPCIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="304" y="12" width="115" height="20" uuid="8bdc36ab-e35c-46ef-b936-fc6743997968"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#0099FF"/>
+					<topPen lineWidth="0.75" lineColor="#0099FF"/>
+					<leftPen lineWidth="0.75" lineColor="#0099FF"/>
+					<bottomPen lineWidth="0.75" lineColor="#0099FF"/>
+					<rightPen lineWidth="0.75" lineColor="#0099FF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRECIO UNITARIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="419" y="12" width="100" height="20" uuid="74992393-9bd0-49a6-be00-a330217fdf98"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#0099FF"/>
+					<topPen lineWidth="0.75" lineColor="#0099FF"/>
+					<leftPen lineWidth="0.75" lineColor="#0099FF"/>
+					<bottomPen lineWidth="0.75" lineColor="#0099FF"/>
+					<rightPen lineWidth="0.75" lineColor="#0099FF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IMPORTE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

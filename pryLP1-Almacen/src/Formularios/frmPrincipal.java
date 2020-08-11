@@ -225,9 +225,9 @@ public class frmPrincipal extends javax.swing.JFrame {
         PanelAlmacenLayout.setHorizontalGroup(
             PanelAlmacenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelAlmacenLayout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(48, 48, 48)
                 .addComponent(btnUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
+                .addGap(27, 27, 27)
                 .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(btnProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -258,12 +258,17 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.setBackground(new java.awt.Color(255, 255, 153));
 
-        jMenu2.setText("Reportes ");
+        jMenu2.setText("Movimientos");
 
-        jMenuItem3.setText("Compras");
+        jMenuItem3.setText("Entradas");
         jMenu2.add(jMenuItem3);
 
-        jMenuItem5.setText("Ventas");
+        jMenuItem5.setText("Salidas");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem5);
 
         jMenuBar1.add(jMenu2);
@@ -288,7 +293,7 @@ public class frmPrincipal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
                 .addComponent(PanelAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -328,9 +333,13 @@ public class frmPrincipal extends javax.swing.JFrame {
 
     private void btnFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturasActionPerformed
         this.dispose();
-        frmFacturas facturas = new frmFacturas();
-        facturas.setVisible(true);
+        frmFacturacion factura = new frmFacturacion();
+        factura.setVisible(true);
     }//GEN-LAST:event_btnFacturasActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
      * @param args the command line arguments

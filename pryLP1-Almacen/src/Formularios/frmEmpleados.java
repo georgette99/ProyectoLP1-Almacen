@@ -281,6 +281,7 @@ public class frmEmpleados extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel7.setText("Direccion:");
 
+        txtCodigo.setEnabled(false);
         txtCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCodigoActionPerformed(evt);

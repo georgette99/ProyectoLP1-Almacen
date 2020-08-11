@@ -46,7 +46,7 @@ public class clsConexion {
        strServer = "jdbc:mysql://localhost:3306/";
         strBD = "bdalmacen";
         strUsuario = "root";
-        strPassword = "vanessalp";
+        strPassword = "123";
         
         try {
 
@@ -81,23 +81,22 @@ public class clsConexion {
     public void mtdAgregarDato ( String pCod, String pDNI, String pNombre, String pAp_pat,
                                  String pAp_mat, String pDireccion, String pCorreo, 
                                  String pTelef, String pSexo, String pCargo, String pAr_trab){
-        strSQL = "INSERT INTO empleados(Codigo, DNI, Nombres, Ap_pat, Ap_mat, Direccion, Correo, Telefono, Sexo, Cargo, Area_Trabajo)"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        strSQL = "INSERT INTO empleados(DNI, Nombres, Ap_pat, Ap_mat, Direccion, Correo, Telefono, Sexo, Cargo, Area_Trabajo)"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps;
                  
         try {
             ps = objcnn.prepareStatement(strSQL);
-            ps.setString(1, pCod);
-            ps.setString(2, pDNI);
-            ps.setString(3, pNombre);
-            ps.setString(4, pAp_pat);
-            ps.setString(5, pAp_mat);
-            ps.setString(6, pDireccion);
-            ps.setString(7, pCorreo);
-            ps.setString(8, pTelef);
-            ps.setString(9, pSexo);
-            ps.setString(10, pCargo);
-            ps.setString(11, pAr_trab);
+            ps.setString(1, pDNI);
+            ps.setString(2, pNombre);
+            ps.setString(3, pAp_pat);
+            ps.setString(4, pAp_mat);
+            ps.setString(5, pDireccion);
+            ps.setString(6, pCorreo);
+            ps.setString(7, pTelef);
+            ps.setString(8, pSexo);
+            ps.setString(9,pCargo);
+            ps.setString(10,pAr_trab);
             
             System.out.println("registro grabado");
             ps.executeUpdate();
@@ -201,17 +200,16 @@ public class clsConexion {
     //CLIENTES
     public void mtdAgregarDatoCliente ( String pCodigo, String pRUC, String pNombre,  String pDireccion, 
                                  String pTelefono, String pCorreo){
-        strSQL = "INSERT INTO clientes VALUES(?, ?, ?, ?, ?, ?)";
+        strSQL = "INSERT INTO clientes (RUC, Nombre, Direccion, Telefono, Correo) VALUES(?, ?, ?, ?, ?)";
         PreparedStatement ps;
                  
         try {
             ps = objcnn.prepareStatement(strSQL);
-            ps.setString(1, pCodigo);
-            ps.setString(2, pRUC);
-            ps.setString(3, pNombre);
-            ps.setString(4, pDireccion);
-            ps.setString(5, pTelefono);
-            ps.setString(6, pCorreo);
+            ps.setString(1, pRUC);
+            ps.setString(2, pNombre);
+            ps.setString(3, pDireccion);
+            ps.setString(4, pTelefono);
+            ps.setString(5, pCorreo);
 
             
             System.out.println("registro grabado");
@@ -319,16 +317,15 @@ public class clsConexion {
     
     //PROVEEDORES
     public void mtdAgregarDatoProveedores (String pCodigo, String pNombre, String pDireccion, String pTelefono, String pCorreo){
-        strSQL = "INSERT INTO proveedores (Codigo, Nombre, Direccion, Telefono, Correo) VALUES(?, ?, ?, ?, ?)";
+        strSQL = "INSERT INTO proveedores (Nombre, Direccion, Telefono, Correo) VALUES(?, ?, ?, ?)";
         PreparedStatement ps;
                  
         try {
             ps = objcnn.prepareStatement(strSQL);
-            ps.setString(1, pCodigo);
-            ps.setString(2, pNombre);
-            ps.setString(3, pDireccion);
-            ps.setString(4, pTelefono);
-            ps.setString(5, pCorreo);
+            ps.setString(1, pNombre);
+            ps.setString(2, pDireccion);
+            ps.setString(3, pTelefono);
+            ps.setString(4, pCorreo);
             
             System.out.println("registro grabado");
             ps.executeUpdate();
@@ -588,17 +585,15 @@ public class clsConexion {
     }
     
     //USUARIOS
-    
     public void mtdAgregarDatoUsuarios ( String pID, String pClave, String pUsuario,  String pCorreo){
-        strSQL = "INSERT INTO usuarios (ID , Clave , Usuario , Correo)VALUES(?, ?, ?, ?)";
+        strSQL = "INSERT INTO usuarios (Clave , Usuario , Correo)VALUES(?, ?, ?)";
         PreparedStatement ps;
                  
         try {
             ps = objcnn.prepareStatement(strSQL);
-            ps.setString(1, pID);
-            ps.setString(2, pClave);
-            ps.setString(3, pUsuario);
-            ps.setString(4, pCorreo);
+            ps.setString(1, pClave);
+            ps.setString(2, pUsuario);
+            ps.setString(3, pCorreo);
            
             System.out.println("registro grabado");
             ps.executeUpdate();
@@ -672,9 +667,8 @@ public class clsConexion {
         } 
         return list;
     }
-    
-    public void mtdEliminarDatoUsuario(String pCodigo){
-        strSQL = "DELETE FROM usuarios WHERE Codigo = '" + pCodigo + "'".trim();
+    public void mtdEliminarDatoUsuario(String pID){
+        strSQL = "DELETE FROM usuarios WHERE ID = '" + pID + "'".trim();
         try{
             objStt = objcnn.createStatement();
             objStt.execute(strSQL); //INSERT ...
@@ -684,10 +678,10 @@ public class clsConexion {
             System.out.println("ERROR en la eliminacion: " + eSQL );
         }
     }
-    // loggin
-            
+    
+    //LOGIN
     public int mtdLogin(String nombre, String clave){
-        String strSQL3 = "SELECT * FROM tb_usuarios WHERE usu_nombre = ? AND usu_clave = ?";      
+        String strSQL3 = "SELECT * FROM usuarios WHERE Usuario = ? AND Clave = ?";      
 	PreparedStatement ps;
         int salida = -1;
 	try {

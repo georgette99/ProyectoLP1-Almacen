@@ -4,8 +4,6 @@ package Formularios;
 import ConexionBD.clsConexion;
 import java.awt.Image;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -151,6 +149,7 @@ public final class frmClientes extends javax.swing.JFrame {
 
         jLabel6.setText("Código:");
 
+        txtCodigo.setEnabled(false);
         txtCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCodigoActionPerformed(evt);
@@ -458,7 +457,7 @@ public final class frmClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_TablaClientesAncestorAdded
 
     private void TablaClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaClientesMouseClicked
-                 int row = TablaClientes.getSelectedRow();
+        int row = TablaClientes.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(null, "No se Selecciono");
         } else {

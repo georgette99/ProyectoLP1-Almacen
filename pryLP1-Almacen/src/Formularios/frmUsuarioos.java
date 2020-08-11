@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import pckClases.clsUsuarios;
 
@@ -24,10 +25,10 @@ public class frmUsuarioos extends javax.swing.JFrame {
         initComponents();
         listar(1);
         setLocationRelativeTo(this);
-        btnAgregar.setIcon(setIcono("/Imagenes/Agregar.png", btnAgregar));
-        btnEditar.setIcon(setIcono("/Imagenes/editar.png", btnEditar));
-        btnEliminar.setIcon(setIcono("/Imagenes/Eliminar.png", btnEliminar));
-        btnBuscar.setIcon(setIcono("/Imagenes/buscar.png", btnBuscar));
+        btnAgregar.setIcon(setIcono("/Imagenes/AgregarUsuario.png", btnAgregar));
+        btnEditar.setIcon(setIcono("/Imagenes/EditarUsuario.png", btnEditar));
+        btnEliminar.setIcon(setIcono("/Imagenes/EliminarUsuario.png", btnEliminar));
+        btnBuscar.setIcon(setIcono("/Imagenes/BuscarUsuario.png", btnBuscar));
    
     }
     
@@ -96,6 +97,7 @@ public class frmUsuarioos extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaUsuarios = new javax.swing.JTable();
         txtBuscar = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -137,6 +139,8 @@ public class frmUsuarioos extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(255, 204, 153));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Registro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tw Cen MT Condensed", 1, 14))); // NOI18N
+
+        txtID.setEnabled(false);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Usuario:");
@@ -259,7 +263,19 @@ public class frmUsuarioos extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        TablaUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaUsuariosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(TablaUsuarios);
+
+        jButton1.setText("Volver a Login ");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -275,6 +291,10 @@ public class frmUsuarioos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(40, 40, 40))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,7 +308,9 @@ public class frmUsuarioos extends javax.swing.JFrame {
                         .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -376,6 +398,22 @@ public class frmUsuarioos extends javax.swing.JFrame {
        limpiar();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.dispose();
+        frmLogin login = new frmLogin();
+        login.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void TablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaUsuariosMouseClicked
+        int filaseleccionada = TablaUsuarios.getSelectedRow();
+        
+        txtID.setText(String.valueOf(TablaUsuarios.getValueAt(filaseleccionada, 0)));
+        txtClave.setText(String.valueOf(TablaUsuarios.getValueAt(filaseleccionada, 1)));
+        txtUsuario.setText(String.valueOf(TablaUsuarios.getValueAt(filaseleccionada, 2)));
+        txtCorreo.setText(String.valueOf(TablaUsuarios.getValueAt(filaseleccionada, 3)));
+
+    }//GEN-LAST:event_TablaUsuariosMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -431,6 +469,7 @@ public class frmUsuarioos extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

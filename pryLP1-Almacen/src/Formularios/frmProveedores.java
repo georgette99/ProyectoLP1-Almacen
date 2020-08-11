@@ -143,6 +143,8 @@ public class frmProveedores extends javax.swing.JFrame {
 
         jLabel6.setText("Correo:");
 
+        txtCodigo.setEnabled(false);
+
         jPanel3.setBackground(new java.awt.Color(204, 204, 0));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Opciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
