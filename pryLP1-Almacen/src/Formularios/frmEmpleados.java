@@ -14,11 +14,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.dao.empleadosDAO;
+import modelo.dao.proveedoresDAO;
 import pckClases.clsEmpleados;
 
 public class frmEmpleados extends javax.swing.JFrame {
 
    clsConexion objcnn = new clsConexion();
+   empleadosDAO clcn = new empleadosDAO();
+   private clsEmpleados empleado;
+   Connection con;
    DefaultTableModel modelo;
  
     
@@ -36,8 +41,222 @@ public class frmEmpleados extends javax.swing.JFrame {
         btnLimpiar.setIcon(setIcono("/Imagenes/limpiar.png", btnLimpiar));
     }
     
+    void inicializarTabla() {
+        DefaultTableModel df = new DefaultTableModel(null, cabecera);
+        TablaEmpleados.setModel(df);
+    }
+    
+    void listarTodos() throws ClassNotFoundException {
+        ArrayList<clsEmpleados> clnts = empleadosDAO.obtenerTodos();
+        listarTabla(clnts);
+    }
+    
+    void listarTabla(ArrayList<clsEmpleados> lista) {
+        DefaultTableModel df = (DefaultTableModel) TablaEmpleados.getModel();
+        df.setRowCount(0);
+        
+        for (clsEmpleados c:lista) {
+            df.addRow(new Object[]{
+                c.getCodigo(),
+                c.getNombre(),
+                c.getAp_m(),
+                c.getAp_p(),
+                c.getDni(),
+                c.getDireccion(),
+                c.getTelefono(),
+                c.getCorreo(),
+                c.getSexo(),
+                c.getCargo(),
+                c.getArea_tra()
+            });
+        }
+    }
+    
+    void limpiarCampos() {
+        txtNombres.setText("");
+        txtDNI.setText("");
+        txtAp_m.setText("");
+        txtAp_p.setText("");
+        txtCorreo.setText("");
+        txtDireccion.setText("");
+        txtTelefono.setText("");
+        txtSexo.setText("");
+        txtCargo.setText("");
+        txtAr_trab.setText("");
+     //   txtCodigo.setText("");
+    }
+    
+    void limpiarEmpleado() {
+        empleado = null;
+    }
+    
+    void insertar() throws ClassNotFoundException {
+        String nombre = txtNombres.getText();
+        String ap_p = txtAp_p.getText();
+        String ap_m =txtAp_m.getText();
+        String DNI = txtDNI.getText();
+        String direccion = txtDireccion.getText();
+        String telefono = txtTelefono.getText();
+        String correo = txtCorreo.getText();
+        String sexo = txtSexo.getText();
+        String cargo = txtCargo.getText();
+        String area = txtAr_trab.getText();
+        
+        empleado = new clsEmpleados();
+        
+        empleado.setNombre(nombre);
+        empleado.setDni(DNI);
+        empleado.setAp_m(ap_m);
+        empleado.setAp_p(ap_p);
+        empleado.setSexo(sexo);
+        empleado.setDireccion(direccion);
+        empleado.setTelefono(telefono);
+        empleado.setCorreo(correo);
+        empleado.setCargo(cargo);
+        empleado.setArea_tra(area);
+        
+        int res = empleadosDAO.mtdAgregarDato(empleado);
+        
+        if(res == 0){
+            JOptionPane.showMessageDialog(this, "No se logró ingresar el empleado");
+        } else {
+            JOptionPane.showMessageDialog(this, "Se ingresó correctamente al empleado");
+            limpiarCampos();
+            listarTodos();
+        }
+        
+        
+    }
     
     void listar(int opcion){
+        modelo = new DefaultTableModel(null, cabecera);
+        TablaEmpleados.setModel(modelo);
+        try {
+            objcnn.mtdAbrirBD();
+            switch (opcion){
+                case 1:
+                    ArrayList<clsEmpleados> usu = clcn.obtenerTodos();
+                    for(clsEmpleados u:usu){
+                        modelo.addRow(new Object[]{
+                            u.getCodigo(), u.getNombre(), u.getAp_p(), u.getAp_m(), u.getArea_tra(), u.getCargo(),
+                        });
+                    }
+                    break;
+           /*     case 2:
+                    String Codigo = txtBuscar.getText();
+                    clsClientes usr1 = objcnn.mtdBuscarRegistroCliente(Codigo);
+                    modelo.addRow(new Object[]{
+                        usr1.getCodigo(), usr1.getRUC(), usr1.getNombre(), usr1.getDireccion(), usr1.getTelefono(), usr1.getCorreo(),});
+                    break;*/
+
+                default:
+                    System.out.println("Opción inválida");
+                    break;
+            }
+
+            
+            objcnn.mtdCerrarBD();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    void cargarEmpleados() {
+        if(empleado != null) {
+            
+            txtNombres.setText(empleado.getNombre());
+            txtDNI.setText(empleado.getDni());
+            txtDireccion.setText(empleado.getDireccion());
+            txtCorreo.setText(empleado.getCorreo());
+            txtTelefono.setText(empleado.getTelefono());
+            txtAp_m.setText(empleado.getAp_m());
+            txtAp_p.setText(empleado.getAp_p());
+            txtSexo.setText(empleado.getSexo());
+            txtCargo.setText(empleado.getCargo());
+            txtAr_trab.setText(empleado.getArea_tra());
+        }
+    }
+    
+    void seleccionar() throws ClassNotFoundException {
+        int fila = TablaEmpleados.getSelectedRow();
+        
+        if(fila >= 0) {
+            
+            int codigo = (int) TablaEmpleados.getModel().getValueAt(fila, 0);
+            
+            empleado = empleadosDAO.obtenerUno(codigo);
+            
+            cargarEmpleados();
+         //   habilitarBotones(false);
+        }
+    }
+    
+    
+    
+    
+    void modificar() throws ClassNotFoundException {
+        
+        if(empleado!= null) {
+            
+            String nombre = txtNombres.getText();
+            String ap_pat = txtAp_p.getText();
+            String ap_mat = txtAp_m.getText();
+            String dni = txtDNI.getText();
+            String direccion = txtDireccion.getText();
+            String correo = txtCorreo.getText();
+            String telefono = txtTelefono.getText();
+            String sexo = txtSexo.getText();
+            String cargo = txtCargo.getText();
+            String area = txtAr_trab.getText();
+
+            empleado.setNombre(nombre);
+            empleado.setAp_p(ap_pat);
+            empleado.setAp_m(ap_mat);
+            empleado.setDni(dni);
+            empleado.setDireccion(direccion);
+            empleado.setTelefono(telefono);
+            empleado.setCorreo(correo);
+            empleado.setSexo(sexo);
+            empleado.setCargo(cargo);
+            empleado.setArea_tra(area);
+            
+            
+            
+            int res = empleadosDAO.mtdModificarDatoEmpleado(empleado);
+            
+            if(res == 0){
+                JOptionPane.showMessageDialog(this, "No se logró modificar el empleado");
+            } else {
+                JOptionPane.showMessageDialog(this, "Se modificó correctamente al empleado");
+                limpiarCampos();
+                listarTodos();
+                limpiarEmpleado();
+            }
+        }
+        
+    }
+    
+    void eliminar() throws ClassNotFoundException {
+        if(empleado != null) {
+            
+            int opt = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al empleado"+ empleado.getNombre() +"?");
+            
+            if(opt == JOptionPane.OK_OPTION) {
+                int res = empleadosDAO.eliminar(empleado.getCodigo());
+            
+                if(res == 0){
+                    JOptionPane.showMessageDialog(this, "No se logró eliminar el empleado");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Se eliminó correctamente al empleado");
+                    limpiarCampos();
+                    listarTodos();
+                    limpiarEmpleado();
+                }
+            }
+        }
+    }
+    
+    /*void listar(int opcion){
         modelo = new DefaultTableModel(null, cabecera);
         TablaEmpleados.setModel(modelo);
         try {
@@ -57,13 +276,13 @@ public class frmEmpleados extends javax.swing.JFrame {
                     modelo.addRow(new Object[]{
                         usr1.getCodigo(), usr1.getNombre(), usr1.getAp_p(), usr1.getAp_m(), usr1.getCargo(), usr1.getArea_tra(),});
                     break;
-        /*        case 3:
+                case 3:
                     String nombre2 = txtNuevo.getText();
                     clsUsuario usr2 = objAccesoBD.mtdBuscarRegistro(nombre2);
                     modelo.addRow(new Object[]{
                         usr2.getId(), usr2.getNombre(), usr2.getClave()
                     });
-                    break;*/
+                    break;
                 default:
                     System.out.println("Opción inválida");
                     break;
@@ -74,7 +293,7 @@ public class frmEmpleados extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
    
     
     @SuppressWarnings("unchecked")
@@ -408,6 +627,11 @@ public class frmEmpleados extends javax.swing.JFrame {
         btnEditar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEditar.setForeground(new java.awt.Color(255, 255, 255));
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setBackground(new java.awt.Color(0, 51, 51));
         btnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -425,8 +649,8 @@ public class frmEmpleados extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -510,31 +734,11 @@ public class frmEmpleados extends javax.swing.JFrame {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
        try {
-            objcnn.mtdAbrirBD();
-            objcnn.mtdObtenerDatosTabla();
-            
-            String Codigo, Dni, Nombre, ap_p, ap_m, direccion, 
-                   correo, telefono, sexo, cargo, area_tra;
-            
-            Codigo = txtCodigo.getText();
-            Dni = txtDNI.getText();
-            Nombre = txtNombres.getText();
-            ap_p = txtAp_p.getText();
-            ap_m = txtAp_m.getText();
-            direccion = txtDireccion.getText();
-            correo = txtCorreo.getText();
-            telefono = txtTelefono.getText();
-            sexo = txtSexo.getText();
-            cargo = txtCargo.getText();
-            area_tra = txtAr_trab.getText();
-            
-            objcnn.mtdAgregarDato(Codigo, Dni, Nombre, ap_p, ap_m, direccion, 
-                                 correo, telefono, sexo, cargo, area_tra);
-            objcnn.mtdCerrarBD();
-        } catch (Exception e) {
-        }
-       
-       listar(1);
+           insertar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmClientes.class.getName()).log(Level.SEVERE, null, ex);
+       }
+        limpiar();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -565,22 +769,10 @@ public class frmEmpleados extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
           try {
-           objcnn.mtdAbrirBD();
-           objcnn.mtdObtenerDatosTabla();
-           
-           String Criterio;
-           
-           Criterio = txtCodigo.getText();
-
-           objcnn.mtdEliminarDatoEmpleados(Criterio);
-           objcnn.mtdCerrarBD();
-       } 
-       
-       catch (Exception e) {
-           System.out.println("No se pudo eliminar correctamente");
-       }
-       listar(1);
-       limpiar();
+           eliminar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+       }  
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -602,16 +794,22 @@ public class frmEmpleados extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCodigoActionPerformed
 
     private void TablaEmpleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaEmpleadosMouseClicked
-        int filaseleccionada = TablaEmpleados.getSelectedRow();
+       try {
+           seleccionar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+       }
         
-        txtCodigo.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 0)));
-        txtNombres.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 1)));
-        txtAp_p.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 2)));
-        txtAp_m.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 3)));
-        txtCargo.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 4)));
-        txtAr_trab.setText(String.valueOf(TablaEmpleados.getValueAt(filaseleccionada, 5)));
         
     }//GEN-LAST:event_TablaEmpleadosMouseClicked
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        try {
+           modificar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+       }
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     public static void main(String args[]) {
 

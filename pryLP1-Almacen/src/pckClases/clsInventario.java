@@ -1,18 +1,18 @@
 package pckClases;
 
 public class clsInventario {
-    private String Codigo_Inv;
+    private int Codigo_Inv;
     private String Stock;
     private String Descripcion;
     private String Precio;       
     private String Linea;       
     private String Unidad;
 
-    public String getCodigo_Inv() {
+    public int getCodigo_Inv() {
         return Codigo_Inv;
     }
 
-    public void setCodigo_Inv(String Codigo_Inv) {
+    public void setCodigo_Inv(int Codigo_Inv) {
         this.Codigo_Inv = Codigo_Inv;
     }
 

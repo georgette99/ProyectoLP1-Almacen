@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="entradas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7b9b132b-b42f-4cdb-86dd-cbf98d742d19">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     detalles_entrada.`cod_producto` AS detalles_entrada_cod_producto,
+     detalles_entrada.`cantidad` AS detalles_entrada_cantidad,
+     inventario.`Cod_Inv` AS inventario_Cod_Inv,
+     inventario.`Stock` AS inventario_Stock,
+     inventario.`Descripcion` AS inventario_Descripcion,
+     inventario.`Precio` AS inventario_Precio,
+     inventario.`Linea` AS inventario_Linea,
+     inventario.`Unidad` AS inventario_Unidad,
+     entradas.`id_entrada` AS entradas_id_entrada,
+     entradas.`fecha_entrada` AS entradas_fecha_entrada,
+     entradas.`cod_proveedor` AS entradas_cod_proveedor,
+     detalles_entrada.`id_entrada` AS detalles_entrada_id_entrada
+FROM
+     `inventario` inventario INNER JOIN `detalles_entrada` detalles_entrada ON inventario.`Cod_Inv` = detalles_entrada.`cod_producto`
+     INNER JOIN `entradas` entradas ON detalles_entrada.`id_entrada` = entradas.`id_entrada`]]>
+	</queryString>
+	<field name="detalles_entrada_cod_producto" class="java.lang.Integer"/>
+	<field name="detalles_entrada_cantidad" class="java.lang.Integer"/>
+	<field name="inventario_Cod_Inv" class="java.lang.Integer"/>
+	<field name="inventario_Stock" class="java.lang.Integer"/>
+	<field name="inventario_Descripcion" class="java.lang.String"/>
+	<field name="inventario_Precio" class="java.math.BigDecimal"/>
+	<field name="inventario_Linea" class="java.lang.String"/>
+	<field name="inventario_Unidad" class="java.lang.String"/>
+	<field name="entradas_id_entrada" class="java.lang.Integer"/>
+	<field name="entradas_fecha_entrada" class="java.sql.Date"/>
+	<field name="entradas_cod_proveedor" class="java.lang.Integer"/>
+	<field name="detalles_entrada_id_entrada" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="245" y="29" width="82" height="20" uuid="8455d799-db6b-4fd7-8cb3-be0ee683afb1"/>
+				<text><![CDATA[ENTRADAS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

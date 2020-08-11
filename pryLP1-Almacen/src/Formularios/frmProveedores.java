@@ -3,18 +3,24 @@ package Formularios;
 
 import ConexionBD.clsConexion;
 import java.awt.Image;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.dao.proveedoresDAO;
 import pckClases.clsProveedores;
 
 public class frmProveedores extends javax.swing.JFrame {
     
    clsConexion objcnn = new clsConexion();
+   proveedoresDAO clcn = new proveedoresDAO();
+   private clsProveedores proveedor;
+   Connection con;
    DefaultTableModel modelo;
  
     
@@ -30,6 +36,69 @@ public class frmProveedores extends javax.swing.JFrame {
         btnBuscar.setIcon(setIcono("/Imagenes/buscar.png", btnBuscar));
     }
     
+    void inicializarTabla() {
+        DefaultTableModel df = new DefaultTableModel(null, cabecera);
+        TablaProveedores.setModel(df);
+    }
+    
+    void listarTodos() throws ClassNotFoundException {
+        ArrayList<clsProveedores> clnts = proveedoresDAO.obtenerTodosProveedores();
+        listarTabla(clnts);
+    }
+    
+    void listarTabla(ArrayList<clsProveedores> lista) {
+        DefaultTableModel df = (DefaultTableModel) TablaProveedores.getModel();
+        df.setRowCount(0);
+        
+        for (clsProveedores c:lista) {
+            df.addRow(new Object[]{
+                c.getCodigo(),
+                c.getNombre(),
+                c.getDireccion(),
+                c.getTelefono(),
+                c.getCorreo()
+            });
+        }
+    }
+    
+    void limpiarCampos() {
+        txtNombre.setText("");
+        txtCorreo.setText("");
+        txtDireccion.setText("");
+        txtTelefono.setText("");
+     //   txtCodigo.setText("");
+    }
+    
+    void limpiarProveedor() {
+        proveedor = null;
+    }
+    
+    void insertar() throws ClassNotFoundException {
+        String nombre = txtNombre.getText();
+        String direccion = txtDireccion.getText();
+        String telefono = txtTelefono.getText();
+        String correo = txtCorreo.getText();
+        
+        proveedor = new clsProveedores();
+        
+        proveedor.setNombre(nombre);
+        proveedor.setDireccion(direccion);
+        proveedor.setTelefono(telefono);
+        proveedor.setCorreo(correo);
+        
+        int res = proveedoresDAO.mtdAgregarDatoProveedores(proveedor);
+        
+        if(res == 0){
+            JOptionPane.showMessageDialog(this, "No se logró ingresar el proveedor");
+        } else {
+            JOptionPane.showMessageDialog(this, "Se ingresó correctamente al proveedor");
+            limpiarCampos();
+            listarTodos();
+        }
+        
+        
+    }
+    
     void listar(int opcion){
         modelo = new DefaultTableModel(null, cabecera);
         TablaProveedores.setModel(modelo);
@@ -37,26 +106,20 @@ public class frmProveedores extends javax.swing.JFrame {
             objcnn.mtdAbrirBD();
             switch (opcion){
                 case 1:
-                    ArrayList<clsProveedores> usu = objcnn.obtenerTodosProveedores();
+                    ArrayList<clsProveedores> usu = clcn.obtenerTodosProveedores();
                     for(clsProveedores u:usu){
                         modelo.addRow(new Object[]{
-                            u.getCodigo(), u.getNombre(), u.getDireccion(), u.getTelefono(), u.getCorreo()
+                            u.getCodigo(),u.getNombre(),u.getDireccion(), u.getTelefono(), u.getCorreo(),
                         });
                     }
                     break;
-                case 2:
+           /*     case 2:
                     String Codigo = txtBuscar.getText();
                     clsProveedores usr1 = objcnn.mtdBuscarRegistroProveedor(Codigo);
                     modelo.addRow(new Object[]{
-                        usr1.getCodigo(), usr1.getNombre(), usr1.getDireccion(), usr1.getTelefono(), usr1.getCorreo() });
-                    break;
-        /*        case 3:
-                    String nombre2 = txtNuevo.getText();
-                    clsUsuario usr2 = objAccesoBD.mtdBuscarRegistro(nombre2);
-                    modelo.addRow(new Object[]{
-                        usr2.getId(), usr2.getNombre(), usr2.getClave()
-                    });
+                        usr1.getCodigo(), usr1.getRUC(), usr1.getNombre(), usr1.getDireccion(), usr1.getTelefono(), usr1.getCorreo(),});
                     break;*/
+
                 default:
                     System.out.println("Opción inválida");
                     break;
@@ -68,7 +131,82 @@ public class frmProveedores extends javax.swing.JFrame {
             Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    void cargarProveedor() {
+        if(proveedor!= null) {
+            
+            txtNombre.setText(proveedor.getNombre());
+            txtDireccion.setText(proveedor.getDireccion());
+            txtCorreo.setText(proveedor.getCorreo());
+            txtTelefono.setText(proveedor.getTelefono());
+        }
+    }
+    
+    void seleccionar() throws ClassNotFoundException {
+        int fila = TablaProveedores.getSelectedRow();
+        
+        if(fila >= 0) {
+            
+            int codigo = (int) TablaProveedores.getModel().getValueAt(fila, 0);
+            
+            proveedor = proveedoresDAO.obtenerUno(codigo);
+            
+            cargarProveedor();
+         //   habilitarBotones(false);
+        }
+    }
+    
+    
+    
+    
+    void modificar() throws ClassNotFoundException {
+        
+        if(proveedor != null) {
+            
+            String nombre = txtNombre.getText();
+            String direccion = txtDireccion.getText();
+            String telefono = txtTelefono.getText();
+            String correo = txtCorreo.getText();
 
+            proveedor.setNombre(nombre);
+            proveedor.setDireccion(direccion);
+            proveedor.setTelefono(telefono);
+            proveedor.setCorreo(correo);
+            
+            int res =proveedoresDAO.mtdModificarDatoProveedor(proveedor);
+            
+            if(res == 0){
+                JOptionPane.showMessageDialog(this, "No se logró modificar el proveedor");
+            } else {
+                JOptionPane.showMessageDialog(this, "Se modificó correctamente al proveedor");
+                limpiarCampos();
+                listarTodos();
+                limpiarProveedor();
+            }
+        }
+        
+    }
+    
+    void eliminar() throws ClassNotFoundException {
+        if(proveedor != null) {
+            
+            int opt = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al proveedor "+ proveedor.getNombre() +"?");
+            
+            if(opt == JOptionPane.OK_OPTION) {
+                int res = proveedoresDAO.eliminar(proveedor.getCodigo());
+            
+                if(res == 0){
+                    JOptionPane.showMessageDialog(this, "No se logró eliminar el proveedor");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Se eliminó correctamente al proveedor");
+                    limpiarCampos();
+                    listarTodos();
+                    limpiarProveedor();
+                }
+            }
+        }
+    }
+   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -162,6 +300,11 @@ public class frmProveedores extends javax.swing.JFrame {
         btnEditar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEditar.setForeground(new java.awt.Color(255, 255, 255));
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setBackground(new java.awt.Color(51, 51, 0));
         btnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -364,23 +507,11 @@ public class frmProveedores extends javax.swing.JFrame {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         try {
-            objcnn.mtdAbrirBD();
-            objcnn.mtdObtenerDatosTablaProveedores();
-            
-            String Codigo, Nombre, Direccion, Telefono, Correo;
-            
-            Codigo = txtCodigo.getText();
-            Nombre = txtNombre.getText();
-            Direccion = txtDireccion.getText();
-            Correo = txtCorreo.getText();
-            Telefono = txtTelefono.getText();
-           
-            objcnn.mtdAgregarDatoProveedores(Codigo, Nombre, Direccion, Telefono, Correo);
-            objcnn.mtdCerrarBD();
-        } catch (Exception e) {
-        }
-       
-       listar(1);
+           insertar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmClientes.class.getName()).log(Level.SEVERE, null, ex);
+       }
+        limpiar();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -404,34 +535,28 @@ public class frmProveedores extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void TablaProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaProveedoresMouseClicked
-        int filaseleccionada = TablaProveedores.getSelectedRow();
-        
-        txtCodigo.setText(String.valueOf(TablaProveedores.getValueAt(filaseleccionada, 0)));
-        txtNombre.setText(String.valueOf(TablaProveedores.getValueAt(filaseleccionada, 1)));
-        txtDireccion.setText(String.valueOf(TablaProveedores.getValueAt(filaseleccionada, 2)));
-        txtTelefono.setText(String.valueOf(TablaProveedores.getValueAt(filaseleccionada, 3)));
-        txtCorreo.setText(String.valueOf(TablaProveedores.getValueAt(filaseleccionada, 4)));
+       try {
+           seleccionar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmProveedores.class.getName()).log(Level.SEVERE, null, ex);
+       }
     }//GEN-LAST:event_TablaProveedoresMouseClicked
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        try {
-           objcnn.mtdAbrirBD();
-           objcnn.mtdObtenerDatosTablaProveedores();
-           
-           String Criterio;
-           
-           Criterio = txtCodigo.getText();
-
-           objcnn.mtdEliminarDatoProveedores(Criterio);
-           objcnn.mtdCerrarBD();
-       } 
-       
-       catch (Exception e) {
-           System.out.println("No se pudo eliminar correctamente");
+       try {
+           eliminar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmProveedores.class.getName()).log(Level.SEVERE, null, ex);
        }
-       listar(1);
-       limpiar();
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        try {
+           modificar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmProveedores.class.getName()).log(Level.SEVERE, null, ex);
+       }  
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments

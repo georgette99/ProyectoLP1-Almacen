@@ -2,7 +2,7 @@ package pckClases;
 
 public class clsEmpleados {
     
-    private String Codigo ;
+    private int Codigo ;
     private String Dni ;
     private String Nombre ;
     private String ap_p ;
@@ -14,11 +14,11 @@ public class clsEmpleados {
     private String cargo ;
     private String area_tra ;
 
-    public String getCodigo() {
+    public int getCodigo() {
         return Codigo;
     }
 
-    public void setCodigo(String Codigo) {
+    public void setCodigo(int Codigo) {
         this.Codigo = Codigo;
     }
 

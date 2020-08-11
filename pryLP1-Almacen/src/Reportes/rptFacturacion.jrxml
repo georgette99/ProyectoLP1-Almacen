@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptFacturacion" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cda924e1-5b50-476f-a4ae-ce02b7bd8733">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="164"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#006666"/>
@@ -27,6 +27,45 @@
 		</box>
 	</style>
 	<subDataset name="Table Dataset 1" uuid="ec9587dd-d44e-4991-bace-b87c5ff8fe6d"/>
+	<queryString>
+		<![CDATA[SELECT
+     factura_salida.`num_factura` AS factura_salida_num_factura,
+     factura_salida.`fecha` AS factura_salida_fecha,
+     factura_salida.`subtotal` AS factura_salida_subtotal,
+     factura_salida.`igv` AS factura_salida_igv,
+     factura_salida.`total` AS factura_salida_total,
+     factura_salida_detalles.`numero_factura` AS factura_salida_detalles_numero_factura,
+     factura_salida_detalles.`cantidad` AS factura_salida_detalles_cantidad,
+     factura_salida_detalles.`importe` AS factura_salida_detalles_importe,
+     inventario.`Cod_Inv` AS inventario_Cod_Inv,
+     inventario.`Descripcion` AS inventario_Descripcion,
+     inventario.`Precio` AS inventario_Precio,
+     inventario.`Unidad` AS inventario_Unidad,
+     clientes.`RUC` AS clientes_RUC,
+     clientes.`Nombre` AS clientes_Nombre,
+     clientes.`Direccion` AS clientes_Direccion,
+     clientes.`Telefono` AS clientes_Telefono
+FROM
+     `factura_salida` factura_salida INNER JOIN `factura_salida_detalles` factura_salida_detalles ON factura_salida.`num_factura` = factura_salida_detalles.`numero_factura`
+     INNER JOIN `inventario` inventario ON factura_salida_detalles.`codigo_producto` = inventario.`Cod_Inv`
+     INNER JOIN `clientes` clientes ON factura_salida.`codigo_cliente` = clientes.`Codigo`]]>
+	</queryString>
+	<field name="factura_salida_num_factura" class="java.lang.Integer"/>
+	<field name="factura_salida_fecha" class="java.sql.Date"/>
+	<field name="factura_salida_subtotal" class="java.math.BigDecimal"/>
+	<field name="factura_salida_igv" class="java.math.BigDecimal"/>
+	<field name="factura_salida_total" class="java.math.BigDecimal"/>
+	<field name="factura_salida_detalles_numero_factura" class="java.lang.Integer"/>
+	<field name="factura_salida_detalles_cantidad" class="java.lang.Integer"/>
+	<field name="factura_salida_detalles_importe" class="java.math.BigDecimal"/>
+	<field name="inventario_Cod_Inv" class="java.lang.Integer"/>
+	<field name="inventario_Descripcion" class="java.lang.String"/>
+	<field name="inventario_Precio" class="java.math.BigDecimal"/>
+	<field name="inventario_Unidad" class="java.lang.String"/>
+	<field name="clientes_RUC" class="java.lang.String"/>
+	<field name="clientes_Nombre" class="java.lang.String"/>
+	<field name="clientes_Direccion" class="java.lang.String"/>
+	<field name="clientes_Telefono" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

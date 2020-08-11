@@ -1,6 +1,7 @@
 
 package Formularios;
 
+import ConexionBD.clsConexion;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -9,18 +10,24 @@ import javax.swing.ImageIcon;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import ConexionBD.clsConexion;
+import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import pckClases.clsInventario;
+import modelo.dao.inventarioDAO;
 
 public class frmInventario extends javax.swing.JFrame {
 
-    private clsConexion objcon = new clsConexion();
-    private String[] cabecera = {"Codigo", "Stock ", "Descripcion", "Precio", "Linea"};
-    DefaultTableModel model;
+   clsConexion objcnn = new clsConexion();
+   inventarioDAO clcn = new inventarioDAO();
+   private clsInventario inventario;
+   Connection con;
+   DefaultTableModel modelo;
     
+   private String[] cabecera = {"Codigo", "Descripcion", "Linea", "Stock", "Precio", "Unidad"};
+   
     public frmInventario() {
         initComponents();
         listar(1);
@@ -31,51 +38,185 @@ public class frmInventario extends javax.swing.JFrame {
         btnEliminar.setIcon(setIcono("/Imagenes/Eliminar.png", btnEliminar));
         btnBuscar.setIcon(setIcono("/Imagenes/buscar.png", btnBuscar));
         btnLimpiar.setIcon(setIcono("/Imagenes/limpiar.png", btnLimpiar));
-       
-
+    }
+    void inicializarTabla() {
+        DefaultTableModel df = new DefaultTableModel(null, cabecera);
+        TablaInventario.setModel(df);
+    }
+    
+    void listarTodos() throws ClassNotFoundException {
+        ArrayList<clsInventario> clnts = inventarioDAO.obtenerTodosInventario();
+        listarTabla(clnts);
+    }
+    
+    void listarTabla(ArrayList<clsInventario> lista) {
+        DefaultTableModel df = (DefaultTableModel) TablaInventario.getModel();
+        df.setRowCount(0);
+        
+        for (clsInventario c:lista) {
+            df.addRow(new Object[]{
+                c.getCodigo_Inv(),
+                c.getDescripcion(),
+                c.getLinea(),
+                c.getPrecio(),
+                c.getStock(),
+                c.getUnidad()
+            });
+        }
+    }
+    
+    void limpiarCampos() {
+        txtUnidad.setText("");
+        txtDescripcion.setText("");
+        txtLinea.setText("");
+        txtPrecio.setText("");
+        txtStock.setText("");
+     //   txtCodigo.setText("");
+    }
+    
+    void limpiarInventario() {
+        inventario = null;
+    }
+    
+    void insertar() throws ClassNotFoundException {
+        String descripcion = txtDescripcion.getText();
+        String linea = txtLinea.getText();
+        String precio = txtPrecio.getText();
+        String stock = txtStock.getText();
+        String unidad = txtUnidad.getText();
+        
+        inventario = new clsInventario();
+        
+        inventario.setDescripcion(descripcion);
+       inventario.setLinea(linea);
+        inventario.setPrecio(precio);
+        inventario.setStock(stock);
+        inventario.setUnidad(unidad);
+        
+        int res = inventarioDAO.mtdAgregarDatoInventario(inventario);
+        
+        if(res == 0){
+            JOptionPane.showMessageDialog(this, "No se logró ingresar el inventario");
+        } else {
+            JOptionPane.showMessageDialog(this, "Se ingresó correctamente al inventario");
+            limpiarCampos();
+            listarTodos();
+        }
+        
+        
     }
     
     void listar(int opcion){
-        model = new DefaultTableModel(null, cabecera);
-        TablaInventario.setModel(model);
+        modelo = new DefaultTableModel(null, cabecera);
+        TablaInventario.setModel(modelo);
         try {
-            objcon.mtdAbrirBD();
+            objcnn.mtdAbrirBD();
             switch (opcion){
                 case 1:
-                    ArrayList<clsInventario> usu = objcon.obtenerDatos();
+                    ArrayList<clsInventario> usu = clcn.obtenerTodosInventario();
                     for(clsInventario u:usu){
-                        model.addRow(new Object[]{
-                            u.getCodigo_Inv(), u.getStock(), u.getDescripcion(),
-                            u.getPrecio(), u.getLinea()
+                        modelo.addRow(new Object[]{
+                            u.getCodigo_Inv(), u.getDescripcion(), u.getLinea(),u.getPrecio(), u.getStock(), u.getUnidad(),
                         });
                     }
                     break;
-                case 2:
-                    String nombre = txtBuscarInv.getText();
-                    clsInventario usr1 = objcon.mtdBuscarProducto(nombre);
-                    model.addRow(new Object[]{
-                        usr1.getCodigo_Inv(), usr1.getStock(), usr1.getDescripcion(), 
-                        usr1.getPrecio(), usr1.getLinea()});
-                    break;
-        /*        case 3:
-                    String nombre2 = txtNuevo.getText();
-                    clsUsuario usr2 = objAccesoBD.mtdBuscarRegistro(nombre2);
-                    model.addRow(new Object[]{
-                        usr2.getId(), usr2.getNombre(), usr2.getClave()
-                    });
+           /*     case 2:
+                    String Codigo = txtBuscar.getText();
+                    clsClientes usr1 = objcnn.mtdBuscarRegistroCliente(Codigo);
+                    modelo.addRow(new Object[]{
+                        usr1.getCodigo(), usr1.getRUC(), usr1.getNombre(), usr1.getDireccion(), usr1.getTelefono(), usr1.getCorreo(),});
                     break;*/
+
                 default:
                     System.out.println("Opción inválida");
                     break;
             }
 
             
-            objcon.mtdCerrarBD();
+            objcnn.mtdCerrarBD();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    void cargarInventario() {
+        if(inventario!= null) {
+            
+            txtDescripcion.setText(inventario.getDescripcion());
+            txtLinea.setText(inventario.getLinea());
+            txtPrecio.setText(inventario.getPrecio());
+            txtStock.setText(inventario.getStock());
+            txtUnidad.setText(inventario.getUnidad());
+        }
+    }
+    
+    void seleccionar() throws ClassNotFoundException {
+        int fila = TablaInventario.getSelectedRow();
+        
+        if(fila >= 0) {
+            
+            int codigo = (int) TablaInventario.getModel().getValueAt(fila, 0);
+            
+            inventario = inventarioDAO.obtenerUno(codigo);
+            
+            cargarInventario();
+         //   habilitarBotones(false);
+        }
+    }
+    
+    
+    
+    
+    void modificar() throws ClassNotFoundException {
+        
+        if(inventario!= null) {
+            
+            String descripcion = txtDescripcion.getText();
+            String linea = txtLinea.getText();
+            String precio = txtPrecio.getText();
+            String stock = txtStock.getText();
+            String unidad = txtUnidad.getText();
 
+            inventario.setDescripcion(descripcion);
+            inventario.setLinea(linea);
+            inventario.setPrecio(precio);
+            inventario.setStock(stock);
+            inventario.setUnidad(unidad);
+            
+            int res = inventarioDAO.mtdModificarDatoInventario(inventario);
+            
+            if(res == 0){
+                JOptionPane.showMessageDialog(this, "No se logró modificar el inventario");
+            } else {
+                JOptionPane.showMessageDialog(this, "Se modificó correctamente al inventario");
+                limpiarCampos();
+                listarTodos();
+                limpiarInventario();
+            }
+        }
+        
+    }
+    
+    void eliminar() throws ClassNotFoundException {
+        if(inventario != null) {
+            
+            int opt = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al producto "+ inventario.getDescripcion()+"?");
+            
+            if(opt == JOptionPane.OK_OPTION) {
+                int res = inventarioDAO.eliminar(inventario.getCodigo_Inv());
+            
+                if(res == 0){
+                    JOptionPane.showMessageDialog(this, "No se logró eliminar el inventario");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Se eliminó correctamente al inventario");
+                    limpiarCampos();
+                    listarTodos();
+                    limpiarInventario();
+                }
+            }
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -134,7 +275,7 @@ public class frmInventario extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(204, 153, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Registro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-        jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.NW_RESIZE_CURSOR));
+        jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jPanel1.setName(""); // NOI18N
 
@@ -173,6 +314,11 @@ public class frmInventario extends javax.swing.JFrame {
         btnEditar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEditar.setForeground(new java.awt.Color(255, 255, 255));
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setBackground(new java.awt.Color(51, 0, 51));
         btnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -411,7 +557,7 @@ public class frmInventario extends javax.swing.JFrame {
                 .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 365, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 367, Short.MAX_VALUE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -431,46 +577,15 @@ public class frmInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        try {
-            objcon.mtdAbrirBD();
-            objcon.mtdObtenerProd();
-            
-            String codigo, stock, descripcion, precio, linea, unidad;
-            
-            codigo = txtCinv.getText();
-            stock = txtStock.getText();
-            descripcion = txtDescripcion.getText();
-            precio = txtPrecio.getText();
-            linea = txtLinea.getText();
-            unidad = txtUnidad.getText();
-          
-            objcon.mtdAgregarProducto(codigo, stock, descripcion, precio, linea, unidad);
-            objcon.mtdCerrarBD();
-        } catch (Exception e) {
-        }
-       
-       listar(1);
+       try {
+           insertar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmInventario.class.getName()).log(Level.SEVERE, null, ex);
+       }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        try {
-            objcon.mtdAbrirBD();
-            
-            String  CampoDeBusqueda;
-            CampoDeBusqueda = txtBuscarInv.getText();
-            if(objcon.mtdBuscarProducto(CampoDeBusqueda)== null){
-                JOptionPane.showMessageDialog(null, "No se encontró el registro");
-                System.out.println("No se ha encontrado el producto");
-            }
-            else{
-                System.out.println("Registro encontrado");
-                listar(2);
-            }
-            
-            objcon.mtdCerrarBD();
-        } catch (Exception e) {
-            System.out.println("Error" + e );
-        }
+        
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -489,24 +604,20 @@ public class frmInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_TablaInventarioMouseClicked
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        try {
-           objcon.mtdAbrirBD();
-           objcon.mtdObtenerProd();
-           
-           String Criterio;
-           
-           Criterio = txtCinv.getText();
-
-           objcon.mtdEliminarProducto(Criterio);
-           objcon.mtdCerrarBD();
-       } 
-       
-       catch (Exception e) {
-           System.out.println("No se pudo eliminar correctamente");
+       try {
+           eliminar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmInventario.class.getName()).log(Level.SEVERE, null, ex);
        }
-       listar(1);
-       limpiar();
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+       try {
+           modificar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmInventario.class.getName()).log(Level.SEVERE, null, ex);
+       }
+    }//GEN-LAST:event_btnEditarActionPerformed
     void limpiar(){
         txtBuscarInv.setText("");
         txtCinv.setText("");

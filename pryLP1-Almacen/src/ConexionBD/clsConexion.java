@@ -20,10 +20,10 @@ public class clsConexion {
     ResultSet objRst = null;
     
     //Variables de identificación de la BD
-    private String strServer = null;
+ /*   private String strServer = null;
     private String strBD = null;
     private String strUsuario = null;
-    private String strPassword = null;
+    private String strPassword = null;*/
     
     //auxiliares
     private String strControlador = null;
@@ -41,36 +41,32 @@ public class clsConexion {
         return objRst;
     }
     
-    public void mtdAbrirBD () throws ClassNotFoundException{
+    public static String strServer = "jdbc:mysql://localhost:3306/bdalmacen";
+    public static String strBD = "bdalmacen";
+    public static String strUsuario = "root";
+    public static String strPassword = "123";
+    
+    public static Connection mtdAbrirBD () throws ClassNotFoundException{
       //strControlador = "com.mysql.jdbc.Driver";
-       strServer = "jdbc:mysql://localhost:3306/";
-        strBD = "bdalmacen";
-        strUsuario = "root";
-        strPassword = "123";
+       Connection conn = null;
+        
         
         try {
+            conn = DriverManager.getConnection(strServer, strUsuario, strPassword);
+            Class.forName("org.mariadb.jdbc.Driver");
 
-            strControlador = "org.mariadb.jdbc.Driver";
             
-            Class.forName(strControlador);
-            
-            objcnn = DriverManager.getConnection(
-                     strServer + strBD,
-                     strUsuario,
-                     strPassword
-            );
-            
-            System.out.println("Conexion exitosa a la BD");
-            
-        } catch (SQLException eSQL) {
-            System.out.println("ERROR de conexion a la BD: " + eSQL);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
+        return conn;
         
     }
     
-    public void mtdCerrarBD (){
+    public void mtdCerrarBD () throws ClassNotFoundException{
         try {
-            objcnn.close();
+            Connection c = mtdAbrirBD();
+            c.close();
             System.out.println("Cierre de base de datos exitoso");
         } catch (SQLException eSQlCerrar) {
             System.out.println("Eror de cierre a la BD: " + eSQlCerrar);
@@ -132,7 +128,7 @@ public class clsConexion {
 		while(rs.next()){
                         embqd= new clsEmpleados();
                     
-			embqd.setCodigo(rs.getString("Codigo"));
+			embqd.setCodigo(rs.getInt("Codigo"));
                         embqd.setDni(rs.getString("DNI"));
 			embqd.setNombre(rs.getString("Nombres"));
 			embqd.setAp_p(rs.getString("Ap_pat"));
@@ -164,7 +160,7 @@ public class clsConexion {
             
             while(rs.next()){
                 us = new clsEmpleados();
-                us.setCodigo(rs.getString("Codigo"));
+                us.setCodigo(rs.getInt("Codigo"));
                 us.setDni("DNI");
                 us.setNombre(rs.getString("Nombres"));
                 us.setAp_p(rs.getString("Ap_pat"));
@@ -244,7 +240,7 @@ public class clsConexion {
 		while(rs.next()){
                         cliente = new clsClientes();
                     
-			cliente.setCodigo(rs.getString("Codigo"));
+			cliente.setCodigo(rs.getInt("Codigo"));
                         cliente.setRUC(rs.getString("RUC"));
 			cliente.setNombre(rs.getString("Nombre"));
                         cliente.setDireccion(rs.getString("Direccion"));
@@ -273,7 +269,7 @@ public class clsConexion {
             
             while(rs.next()){
                 us = new clsClientes();
-                us.setCodigo(rs.getString("Codigo"));
+                us.setCodigo(rs.getInt("Codigo"));
                 us.setRUC(rs.getString("RUC"));
                 us.setNombre(rs.getString("Nombre"));
                 us.setDireccion(rs.getString("Direccion"));
@@ -289,20 +285,6 @@ public class clsConexion {
         } 
         return list;
     }
-    public void mtdModificarDatoCliente(String pCodigo, String pRUC, String pNombre, String pDireccion, String pTelefono, String pCorreo){
-        strSQL = "UPDATE clientes set RUC='" + pRUC + "',Nombre='" + pNombre + "', "
-                + "Direccion ='" +pDireccion +"', Telefono = '" + pTelefono +"', "
-                + "Correo ='" +pCorreo+ "' WHERE Id=" + pCodigo;
-        try {
-            objStt = objcnn.prepareStatement(strSQL);
-            objStt.execute( strSQL ); // INSERT ...
-            System.out.println("Registro grabado");
-        }
-        catch(SQLException eSQL){
-            System.out.println("Error en la modificacio + eSQL");
-        }
-    }
-    
     public void mtdEliminarDatoCliente(String pCodigo){
         strSQL = "DELETE FROM clientes WHERE Codigo = '" + pCodigo + "'".trim();
         try{
@@ -361,7 +343,7 @@ public class clsConexion {
 		while(rs.next()){
                         prov= new clsProveedores();
                     
-			prov.setCodigo(rs.getString("Codigo"));
+			prov.setCodigo(rs.getInt("Codigo"));
                         prov.setNombre("Nombre");
 			prov.setDireccion(rs.getString("Direccion"));
                         prov.setTelefono(rs.getString("Telefono"));
@@ -387,7 +369,7 @@ public class clsConexion {
             
             while(rs.next()){
                 us = new clsProveedores();
-                us.setCodigo(rs.getString("Codigo"));
+                us.setCodigo(rs.getInt("Codigo"));
                 us.setNombre(rs.getString("Nombre"));
                 us.setDireccion(rs.getString("Direccion"));
                 us.setDireccion(rs.getString("Direccion"));
@@ -429,7 +411,7 @@ public class clsConexion {
             
             while(rs.next()){
                 in = new clsInventario();
-                in.setCodigo_Inv(rs.getString("Cod_Inv"));
+                in.setCodigo_Inv(rs.getInt("Cod_Inv"));
                 in.setStock(rs.getString("Stock"));
                 in.setDescripcion(rs.getString("Descripcion"));
                 in.setPrecio(rs.getString("Precio"));
@@ -493,7 +475,7 @@ public class clsConexion {
 		while(rs.next()){
                         prbqd= new clsInventario();
                     
-			prbqd.setCodigo_Inv(rs.getString("Cod_Inv"));
+			prbqd.setCodigo_Inv(rs.getInt("Cod_Inv"));
                         prbqd.setStock(rs.getString("Stock"));
 			prbqd.setDescripcion(rs.getString("Descripcion"));
 			prbqd.setDescripcion(rs.getString("Precio"));
@@ -556,90 +538,6 @@ public class clsConexion {
         }
     } 
     
-    public ArrayList<clsFacturas> obtenerTodosf(){
-        ArrayList<clsFacturas> list = new ArrayList();
-        String SQL = "SELECT * FROM factura_salida";
-        PreparedStatement ps;
-        ResultSet rs;
-        clsFacturas us;
-        
-        try {
-            ps= objcnn.prepareStatement(SQL);
-            rs= ps.executeQuery();
-            
-            while(rs.next()){
-                us = new clsFacturas();
-                us.setIdfacsalida(rs.getString("Idfacsalida"));
-               us.setCodigo(rs.getString("Codigo"));
-               us.setCodi_inven(rs.getString("codi_inven"));
-               us.setFEmi_Salida(rs.getString("FEmi_Salida"));
-                list.add(us);
-            }
-            ps.close();
-            rs.close();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(clsConexion.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        return list;
-    }
-    
-    //USUARIOS
-    public void mtdAgregarDatoUsuarios ( String pID, String pClave, String pUsuario,  String pCorreo){
-        strSQL = "INSERT INTO usuarios (Clave , Usuario , Correo)VALUES(?, ?, ?)";
-        PreparedStatement ps;
-                 
-        try {
-            ps = objcnn.prepareStatement(strSQL);
-            ps.setString(1, pClave);
-            ps.setString(2, pUsuario);
-            ps.setString(3, pCorreo);
-           
-            System.out.println("registro grabado");
-            ps.executeUpdate();
-            ps.close();
-        } catch (Exception e) {
-            System.out.println("Error en escritura del registro" +e.getMessage());
-        }
-    }
-    public void mtdObtenerDatosTablaUsuarios(){
-        strSQL = "SELECT * FROM usuarios ";
-        PreparedStatement st;
-        
-        try {
-            st = objcnn.prepareStatement(strSQL);
-            objRst = st.executeQuery();
-            System.out.println("Apertura exitosa de la tabla");
-            st.close();
-        } catch (Exception e) {
-            System.out.println("Error de apertura");
-        }
-    }
-    public clsUsuarios mtdBuscarRegistroUsuario(String pDato){
-        strSQL = "SELECT * FROM usuarios WHERE ID = ?";
-        clsUsuarios usuario = null;
-	PreparedStatement ps;
-	try {
-		ps = objcnn.prepareStatement(strSQL);
-		ps.setString(1, pDato);
-
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-                        usuario = new clsUsuarios();
-			usuario.setID(rs.getString("ID"));
-                        usuario.setClave(rs.getString("Clave"));
-			usuario.setUsuario(rs.getString("Usuario"));
-                        usuario.setCorreo(rs.getString("Correo"));
-                      
-                       
-		}
-		rs.close();
-		ps.close();
-	} catch(Exception e) {
-		System.out.println(e.getMessage());
-	}
-        return usuario;
-    }  
     public ArrayList<clsUsuarios> obtenerTodosUsuarios(){
         ArrayList<clsUsuarios> list = new ArrayList();
         String SQL = "SELECT * FROM usuarios ";
@@ -653,7 +551,7 @@ public class clsConexion {
             
             while(rs.next()){
                 us = new clsUsuarios();
-                us.setID(rs.getString("ID"));
+                us.setID(rs.getInt("ID"));
                 us.setClave(rs.getString("Clave"));
                 us.setUsuario(rs.getString("Usuario"));
                 us.setCorreo(rs.getString("Correo"));

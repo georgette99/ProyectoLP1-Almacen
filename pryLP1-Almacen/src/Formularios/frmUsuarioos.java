@@ -12,10 +12,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.dao.usuariosDAO;
 import pckClases.clsUsuarios;
 
 public class frmUsuarioos extends javax.swing.JFrame {
    clsConexion objcnn = new clsConexion();
+   usuariosDAO clcn = new usuariosDAO();
+   private clsUsuarios usuario;
    Connection con;
    DefaultTableModel modelo;
     
@@ -32,6 +35,66 @@ public class frmUsuarioos extends javax.swing.JFrame {
    
     }
     
+    void inicializarTabla() {
+        DefaultTableModel df = new DefaultTableModel(null, cabecera);
+        TablaUsuarios.setModel(df);
+    }
+    
+    void listarTodos() throws ClassNotFoundException {
+        ArrayList<clsUsuarios> clnts = usuariosDAO.obtenerTodosUsuarios();
+        listarTabla(clnts);
+    }
+    
+    void listarTabla(ArrayList<clsUsuarios> lista) {
+        DefaultTableModel df = (DefaultTableModel) TablaUsuarios.getModel();
+        df.setRowCount(0);
+        
+        for (clsUsuarios c:lista) {
+            df.addRow(new Object[]{
+                c.getID(),
+                c.getClave(),
+                c.getCorreo(),
+                c.getUsuario()
+            });
+        }
+    }
+    
+    void limpiarCampos() {
+        txtClave.setText("");
+        txtCorreo.setText("");
+        txtCorreo.setText("");
+        txtUsuario.setText("");
+     //   txtCodigo.setText("");
+    }
+    
+    void limpiarUsuarios() {
+        usuario = null;
+    }
+    
+    void insertar() throws ClassNotFoundException {
+        String clave = txtClave.getText();
+        String user = txtUsuario.getText();
+        String correo = txtCorreo.getText();
+        
+        usuario = new clsUsuarios();
+        
+        usuario.setClave(clave);
+        usuario.setUsuario(user);
+        usuario.setCorreo(correo);
+        
+        int res = usuariosDAO.mtdAgregarDatoUsuarios(usuario);
+        
+        if(res == 0){
+            JOptionPane.showMessageDialog(this, "No se logró ingresar el usuario");
+        } else {
+            JOptionPane.showMessageDialog(this, "Se ingresó correctamente al usuario");
+            limpiarCampos();
+            listarTodos();
+        }
+        
+        
+    }
+    
     void listar(int opcion){
         modelo = new DefaultTableModel(null, cabecera);
         TablaUsuarios.setModel(modelo);
@@ -39,26 +102,20 @@ public class frmUsuarioos extends javax.swing.JFrame {
             objcnn.mtdAbrirBD();
             switch (opcion){
                 case 1:
-                    ArrayList<clsUsuarios> usu = objcnn.obtenerTodosUsuarios();
+                    ArrayList<clsUsuarios> usu = clcn.obtenerTodosUsuarios();
                     for(clsUsuarios u:usu){
                         modelo.addRow(new Object[]{
-                            u.getID(), u.getClave() ,u.getUsuario(),u.getCorreo(),
+                            u.getID(), u.getClave(), u.getUsuario(),u.getCorreo(),
                         });
                     }
                     break;
-                case 2:
-                    String ID = txtBuscar.getText();
-                    clsUsuarios usr1 = objcnn.mtdBuscarRegistroUsuario(ID);
+           /*     case 2:
+                    String Codigo = txtBuscar.getText();
+                    clsClientes usr1 = objcnn.mtdBuscarRegistroCliente(Codigo);
                     modelo.addRow(new Object[]{
-                        usr1.getID(), usr1.getClave() ,usr1.getUsuario(), usr1.getCorreo()});
-                    break;
-        /*        case 3:
-                    String nombre2 = txtNuevo.getText();
-                    clsUsuario usr2 = objAccesoBD.mtdBuscarRegistro(nombre2);
-                    modelo.addRow(new Object[]{
-                        usr2.getId(), usr2.getNombre(), usr2.getClave()
-                    });
+                        usr1.getCodigo(), usr1.getRUC(), usr1.getNombre(), usr1.getDireccion(), usr1.getTelefono(), usr1.getCorreo(),});
                     break;*/
+
                 default:
                     System.out.println("Opción inválida");
                     break;
@@ -67,7 +124,79 @@ public class frmUsuarioos extends javax.swing.JFrame {
             
             objcnn.mtdCerrarBD();
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(frmUsuarioos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    void cargarUsuario() {
+        if(usuario != null) {
+            
+            txtClave.setText(usuario.getClave());
+            txtUsuario.setText(usuario.getUsuario());
+            txtCorreo.setText(usuario.getCorreo());
+        }
+    }
+    
+    void seleccionar() throws ClassNotFoundException {
+        int fila = TablaUsuarios.getSelectedRow();
+        
+        if(fila >= 0) {
+            
+            int codigo = (int) TablaUsuarios.getModel().getValueAt(fila, 0);
+            
+            usuario = usuariosDAO.obtenerUno(codigo);
+            
+            cargarUsuario();
+         //   habilitarBotones(false);
+        }
+    }
+    
+    
+    
+    
+    void modificar() throws ClassNotFoundException {
+        
+        if(usuario != null) {
+            
+            String user = txtUsuario.getText();
+            String clave = txtClave.getText();
+            String correo = txtCorreo.getText();
+
+            usuario.setClave(clave);
+            usuario.setUsuario(user);
+            usuario.setCorreo(correo);
+            
+            int res = usuariosDAO.mtdModificarDatoUsuario(usuario);
+            
+            if(res == 0){
+                JOptionPane.showMessageDialog(this, "No se logró modificar el usuario");
+            } else {
+                JOptionPane.showMessageDialog(this, "Se modificó correctamente al usuario");
+                limpiarCampos();
+                listarTodos();
+                limpiarUsuarios();
+            }
+        }
+        
+    }
+    
+    void eliminar() throws ClassNotFoundException {
+        if(usuario != null) {
+            
+            int opt = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al usuario "+ usuario.getUsuario() +"?");
+            
+            if(opt == JOptionPane.OK_OPTION) {
+                int res = usuariosDAO.eliminar(usuario.getID());
+            
+                if(res == 0){
+                    JOptionPane.showMessageDialog(this, "No se logró eliminar el usuario");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Se eliminó correctamente al usuario");
+                    limpiarCampos();
+                    listarTodos();
+                    limpiarUsuarios();
+                }
+            }
         }
     }
 
@@ -165,6 +294,11 @@ public class frmUsuarioos extends javax.swing.JFrame {
         });
 
         btnEditar.setBackground(new java.awt.Color(102, 0, 0));
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setBackground(new java.awt.Color(102, 0, 0));
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -337,65 +471,25 @@ public class frmUsuarioos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        try {
-            objcnn.mtdAbrirBD();
-            
-            String  CampoDeBusqueda;
-            CampoDeBusqueda = txtBuscar.getText();
-            if(objcnn.mtdBuscarRegistroUsuario(CampoDeBusqueda)== null){
-                System.out.println("No se ha encontrado el registro");
-            }
-            else{
-                System.out.println("Registro encontrado");
-                listar(2);
-            }
-            
-            objcnn.mtdCerrarBD();
-        } catch (Exception e) {
-            System.out.println("Error" + e.getMessage() );
-        }
+        
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        try {
-            objcnn.mtdAbrirBD();
-            objcnn.mtdObtenerDatosTablaUsuarios();
-            
-            String ID, Clave, Usuario, Correo;
-            
-           ID = txtID.getText();
-           Clave = txtClave.getText();
-           Usuario = txtUsuario.getText();
-           Correo = txtCorreo.getText();
-            
-            objcnn.mtdAgregarDatoUsuarios(ID, Clave, Usuario, Correo);
-            objcnn.mtdCerrarBD();
-        } catch (Exception e) {
-            System.out.println(" "+ e.getMessage());
-        }
+       try {
+           insertar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmUsuarioos.class.getName()).log(Level.SEVERE, null, ex);
+       }
         
-        listar(1);
-        limpiar();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        try {
-           objcnn.mtdAbrirBD();
-           objcnn.mtdObtenerDatosTablaUsuarios();
-           
-           String Criterio;
-           
-           Criterio = txtID.getText();
-
-           objcnn.mtdEliminarDatoUsuario(Criterio);
-           objcnn.mtdCerrarBD();
-       } 
-       
-       catch (Exception e) {
-           System.out.println("No se pudo eliminar correctamente");
+       try {
+           eliminar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmUsuarioos.class.getName()).log(Level.SEVERE, null, ex);
        }
-       listar(1);
-       limpiar();
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -405,14 +499,22 @@ public class frmUsuarioos extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void TablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaUsuariosMouseClicked
-        int filaseleccionada = TablaUsuarios.getSelectedRow();
-        
-        txtID.setText(String.valueOf(TablaUsuarios.getValueAt(filaseleccionada, 0)));
-        txtClave.setText(String.valueOf(TablaUsuarios.getValueAt(filaseleccionada, 1)));
-        txtUsuario.setText(String.valueOf(TablaUsuarios.getValueAt(filaseleccionada, 2)));
-        txtCorreo.setText(String.valueOf(TablaUsuarios.getValueAt(filaseleccionada, 3)));
+       try {
+           seleccionar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmUsuarioos.class.getName()).log(Level.SEVERE, null, ex);
+       }
 
     }//GEN-LAST:event_TablaUsuariosMouseClicked
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+       try {
+           modificar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmUsuarioos.class.getName()).log(Level.SEVERE, null, ex);
+       }
+        
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments

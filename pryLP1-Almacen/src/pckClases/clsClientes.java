@@ -3,19 +3,18 @@ package pckClases;
 
 public class clsClientes {
     
-    private String Codigo;
+    private int Codigo;
     private String Nombre;
     private String RUC ;
     private String Direccion ;
     private String Telefono ;
     private String Correo ;
-    
 
-    public String getCodigo() {
+    public int getCodigo() {
         return Codigo;
     }
 
-    public void setCodigo(String Codigo) {
+    public void setCodigo(int Codigo) {
         this.Codigo = Codigo;
     }
 

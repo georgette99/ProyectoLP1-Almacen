@@ -2,9 +2,10 @@ package pckClases;
 
 public class clsUsuarios {
 
-    String ID, Clave, Usuario, Tipo, Correo;
+    int ID;
+    String Clave, Usuario, Tipo, Correo;
 
-    public String getID() {
+    public int getID() {
         return ID;
     }
 
@@ -20,7 +21,7 @@ public class clsUsuarios {
         return Correo;
     }
 
-    public void setID(String ID) {
+    public void setID(int ID) {
         this.ID = ID;
     }
 

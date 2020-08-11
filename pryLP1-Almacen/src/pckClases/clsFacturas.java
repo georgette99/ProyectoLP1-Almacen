@@ -3,41 +3,62 @@ package pckClases;
 
 
 public class clsFacturas {
-    private String Idfacsalida;
-    private String Codigo;
-    private String codi_inven;
-    private String FEmi_Salida;
+    
+    private String num_factura;
+    private String fecha;
+    private String codigo_cliente;
+    private double subtotal;
+    private static double total;
+    private double igv;
 
-    public String getIdfacsalida() {
-        return Idfacsalida;
+    public String getNum_factura() {
+        return num_factura;
     }
 
-    public void setIdfacsalida(String Idfacsalida) {
-        this.Idfacsalida = Idfacsalida;
+    public String getFecha() {
+        return fecha;
     }
 
-    public String getCodigo() {
-        return Codigo;
+    public String getCodigo_cliente() {
+        return codigo_cliente;
     }
 
-    public void setCodigo(String Codigo) {
-        this.Codigo = Codigo;
+    public double getSubtotal() {
+        return subtotal;
     }
 
-    public String getCodi_inven() {
-        return codi_inven;
+    public static double getTotal() {
+        return total;
     }
 
-    public void setCodi_inven(String codi_inven) {
-        this.codi_inven = codi_inven;
+    public double getIgv() {
+        return igv;
     }
 
-    public String getFEmi_Salida() {
-        return FEmi_Salida;
+    public void setNum_factura(String num_factura) {
+        this.num_factura = num_factura;
     }
 
-    public void setFEmi_Salida(String FEmi_Salida) {
-        this.FEmi_Salida = FEmi_Salida;
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
+
+    public void setCodigo_cliente(String codigo_cliente) {
+        this.codigo_cliente = codigo_cliente;
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public static void setTotal(double total) {
+        clsFacturas.total = total;
+    }
+
+    public void setIgv(double igv) {
+        this.igv = igv;
+    }
+   
+    
     
 }

@@ -13,10 +13,13 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import pckClases.clsClientes;
+import modelo.dao.clienteDAO;
 
 public final class frmClientes extends javax.swing.JFrame {
     
    clsConexion objcnn = new clsConexion();
+   clienteDAO clcn = new clienteDAO();
+   private clsClientes cliente;
    Connection con;
    DefaultTableModel modelo;
     
@@ -33,7 +36,184 @@ public final class frmClientes extends javax.swing.JFrame {
    
     }
     
+    void inicializarTabla() {
+        DefaultTableModel df = new DefaultTableModel(null, cabecera);
+        TablaClientes.setModel(df);
+    }
+    
+    void listarTodos() throws ClassNotFoundException {
+        ArrayList<clsClientes> clnts = clienteDAO.obtenerTodosClientes();
+        listarTabla(clnts);
+    }
+    
+    void listarTabla(ArrayList<clsClientes> lista) {
+        DefaultTableModel df = (DefaultTableModel) TablaClientes.getModel();
+        df.setRowCount(0);
+        
+        for (clsClientes c:lista) {
+            df.addRow(new Object[]{
+                c.getCodigo(),
+                c.getRUC(),
+                c.getNombre(),
+                c.getDireccion(),
+                c.getTelefono(),
+                c.getCorreo()
+            });
+        }
+    }
+    
+    void limpiarCampos() {
+        txtNombre.setText("");
+        txtRUC.setText("");
+        txtCorreo.setText("");
+        txtDireccion.setText("");
+        txtTelefono.setText("");
+     //   txtCodigo.setText("");
+    }
+    
+    void limpiarCliente() {
+        cliente = null;
+    }
+    
+    void insertar() throws ClassNotFoundException {
+        String nombre = txtNombre.getText();
+        String RUC = txtRUC.getText();
+        String direccion = txtDireccion.getText();
+        String telefono = txtTelefono.getText();
+        String correo = txtCorreo.getText();
+        
+        cliente = new clsClientes();
+        
+        cliente.setNombre(nombre);
+        cliente.setRUC(RUC);
+        cliente.setDireccion(direccion);
+        cliente.setTelefono(telefono);
+        cliente.setCorreo(correo);
+        
+        int res = clienteDAO.mtdAgregarDatoCliente(cliente);
+        
+        if(res == 0){
+            JOptionPane.showMessageDialog(this, "No se logró ingresar el cliente");
+        } else {
+            JOptionPane.showMessageDialog(this, "Se ingresó correctamente al cliente");
+            limpiarCampos();
+            listarTodos();
+        }
+        
+        
+    }
+    
     void listar(int opcion){
+        modelo = new DefaultTableModel(null, cabecera);
+        TablaClientes.setModel(modelo);
+        try {
+            objcnn.mtdAbrirBD();
+            switch (opcion){
+                case 1:
+                    ArrayList<clsClientes> usu = clcn.obtenerTodosClientes();
+                    for(clsClientes u:usu){
+                        modelo.addRow(new Object[]{
+                            u.getCodigo(), u.getRUC(), u.getNombre(),u.getDireccion(), u.getTelefono(), u.getCorreo(),
+                        });
+                    }
+                    break;
+           /*     case 2:
+                    String Codigo = txtBuscar.getText();
+                    clsClientes usr1 = objcnn.mtdBuscarRegistroCliente(Codigo);
+                    modelo.addRow(new Object[]{
+                        usr1.getCodigo(), usr1.getRUC(), usr1.getNombre(), usr1.getDireccion(), usr1.getTelefono(), usr1.getCorreo(),});
+                    break;*/
+
+                default:
+                    System.out.println("Opción inválida");
+                    break;
+            }
+
+            
+            objcnn.mtdCerrarBD();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    void cargarCliente() {
+        if(cliente != null) {
+            
+            txtNombre.setText(cliente.getNombre());
+            txtRUC.setText(cliente.getRUC());
+            txtDireccion.setText(cliente.getDireccion());
+            txtCorreo.setText(cliente.getCorreo());
+            txtTelefono.setText(cliente.getTelefono());
+        }
+    }
+    
+    void seleccionar() throws ClassNotFoundException {
+        int fila = TablaClientes.getSelectedRow();
+        
+        if(fila >= 0) {
+            
+            int codigo = (int) TablaClientes.getModel().getValueAt(fila, 0);
+            
+            cliente = clienteDAO.obtenerUno(codigo);
+            
+            cargarCliente();
+         //   habilitarBotones(false);
+        }
+    }
+    
+    
+    
+    
+    void modificar() throws ClassNotFoundException {
+        
+        if(cliente != null) {
+            
+            String nombre = txtNombre.getText();
+            String ruc = txtRUC.getText();
+            String direccion = txtDireccion.getText();
+            String telefono = txtTelefono.getText();
+            String correo = txtCorreo.getText();
+
+            cliente.setNombre(nombre);
+            cliente.setDireccion(direccion);
+            cliente.setTelefono(telefono);
+            cliente.setCorreo(correo);
+            cliente.setRUC(ruc);
+            
+            int res = clienteDAO.mtdModificarDatoCliente(cliente);
+            
+            if(res == 0){
+                JOptionPane.showMessageDialog(this, "No se logró modificar el cliente");
+            } else {
+                JOptionPane.showMessageDialog(this, "Se modificó correctamente al cliente");
+                limpiarCampos();
+                listarTodos();
+                limpiarCliente();
+            }
+        }
+        
+    }
+    
+    void eliminar() throws ClassNotFoundException {
+        if(cliente != null) {
+            
+            int opt = JOptionPane.showConfirmDialog(this, "¿Desea eliminar al cliente "+ cliente.getNombre() +"?");
+            
+            if(opt == JOptionPane.OK_OPTION) {
+                int res = clienteDAO.eliminar(cliente.getCodigo());
+            
+                if(res == 0){
+                    JOptionPane.showMessageDialog(this, "No se logró eliminar el cliente");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Se eliminó correctamente al cliente");
+                    limpiarCampos();
+                    listarTodos();
+                    limpiarCliente();
+                }
+            }
+        }
+    }
+    /*void listar(int opcion){
         modelo = new DefaultTableModel(null, cabecera);
         TablaClientes.setModel(modelo);
         try {
@@ -53,13 +233,13 @@ public final class frmClientes extends javax.swing.JFrame {
                     modelo.addRow(new Object[]{
                         usr1.getCodigo(), usr1.getRUC(), usr1.getNombre(), usr1.getDireccion(), usr1.getTelefono(), usr1.getCorreo(),});
                     break;
-        /*        case 3:
+                case 3:
                     String nombre2 = txtNuevo.getText();
                     clsUsuario usr2 = objAccesoBD.mtdBuscarRegistro(nombre2);
                     modelo.addRow(new Object[]{
                         usr2.getId(), usr2.getNombre(), usr2.getClave()
                     });
-                    break;*/
+                    break;
                 default:
                     System.out.println("Opción inválida");
                     break;
@@ -70,7 +250,8 @@ public final class frmClientes extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
+    
     
     
     
@@ -392,24 +573,10 @@ public final class frmClientes extends javax.swing.JFrame {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         try {
-            objcnn.mtdAbrirBD();
-            objcnn.mtdObtenerDatosTablaClientes();
-            
-            String Codigo, RUC, Nombre, Direccion, Telefono, Correo;
-            
-            Codigo = txtCodigo.getText();
-            RUC = txtRUC.getText();
-            Nombre = txtNombre.getText();
-            Direccion = txtDireccion.getText();
-            Correo = txtCorreo.getText();
-            Telefono = txtTelefono.getText();
-            
-            objcnn.mtdAgregarDatoCliente(Codigo, RUC, Nombre, Direccion, Telefono, Correo);
-            objcnn.mtdCerrarBD();
-        } catch (Exception e) {
-        }
-        
-        listar(1);
+           insertar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmClientes.class.getName()).log(Level.SEVERE, null, ex);
+       }
         limpiar();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -457,24 +624,11 @@ public final class frmClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_TablaClientesAncestorAdded
 
     private void TablaClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaClientesMouseClicked
-        int row = TablaClientes.getSelectedRow();
-        if (row == -1) {
-            JOptionPane.showMessageDialog(null, "No se Selecciono");
-        } else {
-            int Codigo = Integer.parseInt((String) TablaClientes.getValueAt(row, 0).toString());
-            String RUC = (String) TablaClientes.getValueAt(row, 1);
-            String Nombre = (String) TablaClientes.getValueAt(row, 2);
-            String Direccion = (String) TablaClientes.getValueAt(row, 3);
-            String Telefono = (String) TablaClientes.getValueAt(row, 4);
-            String Correo = (String) TablaClientes.getValueAt(row, 5);
-            txtCodigo.setText("" +Codigo);
-            txtRUC.setText(RUC);
-            txtNombre.setText(Nombre);
-            txtDireccion.setText(Direccion);
-            txtTelefono.setText(Telefono);
-            txtCorreo.setText(Correo);
-
-        }
+       try {
+           seleccionar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmClientes.class.getName()).log(Level.SEVERE, null, ex);
+       }
     }//GEN-LAST:event_TablaClientesMouseClicked
 
     private void txtRUCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRUCActionPerformed
@@ -483,47 +637,19 @@ public final class frmClientes extends javax.swing.JFrame {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         try {
-           objcnn.mtdAbrirBD();
-           objcnn.mtdObtenerDatosTabla();
-           
-           String Codigo, RUC, Nombre, Direccion, Telefono, Correo;
-           
-           Codigo = txtCodigo.getText();
-           RUC = txtRUC.getText();
-           Nombre = txtNombre.getText();
-           Direccion = txtDireccion.getText();
-           Telefono = txtTelefono.getText();
-           Correo = txtCorreo.getText();
-           objcnn.mtdModificarDatoCliente(Codigo, RUC, Nombre, Direccion, Telefono, Correo);
-           objcnn.mtdCerrarBD();
-       } 
-       
-       catch (Exception e) {
-           System.out.println("No se pudo actualizar correctamente");
+           modificar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmClientes.class.getName()).log(Level.SEVERE, null, ex);
        }
-        limpiar();
-        listar(1);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        
-        try {
-           objcnn.mtdAbrirBD();
-           objcnn.mtdObtenerDatosTablaClientes();
-           
-           String Criterio;
-           
-           Criterio = txtCodigo.getText();
 
-           objcnn.mtdEliminarDatoCliente(Criterio);
-           objcnn.mtdCerrarBD();
-       } 
-       
-       catch (Exception e) {
-           System.out.println("No se pudo eliminar correctamente");
-       }
-       listar(1);
-       limpiar();
+       try {
+           eliminar();
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(frmClientes.class.getName()).log(Level.SEVERE, null, ex);
+       }  
     }//GEN-LAST:event_btnEliminarActionPerformed
     
     public Icon setIcono(String url, JButton boton){
