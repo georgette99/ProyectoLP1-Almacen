@@ -24,7 +24,7 @@ public class frmUsuarioos extends javax.swing.JFrame {
     
    private String[] cabecera = {"ID","Clave", "Usuario", "Correo"};
     
-    public frmUsuarioos() {
+   public frmUsuarioos() {
         initComponents();
         listar(1);
         setLocationRelativeTo(this);

@@ -135,7 +135,7 @@ public class inventarioDAO {
     }
     
     public static int mtdAgregarDatoInventario (clsInventario c) throws ClassNotFoundException{
-        String strSQL = "INSERT INTO inventario( Stock, Descripcion, Precio, Linea,Unidad)VALUES( ?, ?, ?, ?, ?)";
+        String strSQL = "INSERT INTO inventario( Descripcion, Linea, Precio, Stock,Unidad)VALUES( ?, ?, ?, ?, ?)";
         
         Connection cn = clsConexion.mtdAbrirBD();
         PreparedStatement ps= null;
