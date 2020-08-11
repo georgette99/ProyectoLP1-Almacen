@@ -51,7 +51,7 @@ public class usuariosDAO {
         return list;
     }
     
-    public static clsUsuarios obtenerUno(int id) throws ClassNotFoundException {
+    public static clsUsuarios obtenerUnoUsuarios(int id) throws ClassNotFoundException {
         
         String sql = "SELECT * FROM usuarios WHERE ID = ?";
         
@@ -71,7 +71,7 @@ public class usuariosDAO {
                 
                 u.setID(rs.getInt("ID"));
                 u.setClave(rs.getString("Clave"));
-                u.setUsuario(rs.getString("Usuarios"));
+                u.setUsuario(rs.getString("Usuario"));
                 u.setCorreo(rs.getString("Correo"));
                 
             }
@@ -113,7 +113,7 @@ public class usuariosDAO {
     }
     
     public static int mtdModificarDatoUsuario(clsUsuarios u) throws ClassNotFoundException{
-        String sql = "UPDATE usuarios set Clav= ?, Usuarios =?, Correo = ? WHERE ID= ?" ;
+        String sql = "UPDATE usuarios set Clave= ?, Usuario =?, Correo = ? WHERE ID= ?" ;
         
         Connection cn = clsConexion.mtdAbrirBD();
         

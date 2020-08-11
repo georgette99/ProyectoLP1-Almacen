@@ -142,9 +142,9 @@ public class frmUsuarioos extends javax.swing.JFrame {
         
         if(fila >= 0) {
             
-            int codigo = (int) TablaUsuarios.getModel().getValueAt(fila, 0);
+            int id = (int) TablaUsuarios.getModel().getValueAt(fila, 0);
             
-            usuario = usuariosDAO.obtenerUno(codigo);
+            usuario = usuariosDAO.obtenerUnoUsuarios(id);
             
             cargarUsuario();
          //   habilitarBotones(false);
@@ -206,6 +206,9 @@ public class frmUsuarioos extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -227,6 +230,9 @@ public class frmUsuarioos extends javax.swing.JFrame {
         TablaUsuarios = new javax.swing.JTable();
         txtBuscar = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -240,6 +246,12 @@ public class frmUsuarioos extends javax.swing.JFrame {
         );
 
         jLabel2.setText("jLabel2");
+
+        jMenu1.setText("File");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
 
         setTitle("USUARIOS");
 
@@ -447,6 +459,20 @@ public class frmUsuarioos extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jMenu3.setText("Opciones");
+
+        jMenuItem1.setText("Regresar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem1);
+
+        jMenuBar2.add(jMenu3);
+
+        setJMenuBar(jMenuBar2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -516,6 +542,12 @@ public class frmUsuarioos extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        this.dispose();
+        frmPrincipal principal = new frmPrincipal();
+        principal.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -578,6 +610,12 @@ public class frmUsuarioos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

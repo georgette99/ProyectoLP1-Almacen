@@ -169,6 +169,8 @@ public class frmFacturacion extends javax.swing.JFrame {
         txtIGV = new javax.swing.JTextField();
         txtTotal = new javax.swing.JTextField();
         txtSubtotal = new javax.swing.JTextField();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
 
         listaProductos.setTitle("Lista de Productos");
         listaProductos.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -624,6 +626,16 @@ public class frmFacturacion extends javax.swing.JFrame {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
+        jMenu1.setText("Operaciones");
+        jMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu1ActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -731,6 +743,12 @@ public class frmFacturacion extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_TablaClienteMouseClicked
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        this.dispose();
+        frmPrincipal principal = new frmPrincipal();
+        principal.setVisible(true);
+    }//GEN-LAST:event_jMenu1ActionPerformed
     
     public Icon setIcono(String url, JButton boton){
          ImageIcon icon = new ImageIcon(getClass().getResource(url));
@@ -798,6 +816,8 @@ public class frmFacturacion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
