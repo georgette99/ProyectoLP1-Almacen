@@ -211,4 +211,41 @@ public class empleadosDAO {
         
         return res;
     }
+    
+    public static ArrayList<clsEmpleados> mtdBuscarRegistroClientes(int pDato)throws ClassNotFoundException{
+        String strSQL = "SELECT * FROM clientes WHERE Codigo = ?";
+        Connection cn = clsConexion.mtdAbrirBD();
+        
+        ArrayList<clsEmpleados> lista = new ArrayList<clsEmpleados>();
+        
+	PreparedStatement ps;
+        
+	try {
+		ps = cn.prepareStatement(strSQL);
+		ps.setInt(1, pDato);
+
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+                    clsEmpleados embqd = new clsEmpleados();
+                        embqd.setCodigo(rs.getInt("Codigo"));
+                        embqd.setDni(rs.getString("DNI"));
+			embqd.setNombre(rs.getString("Nombres"));
+			embqd.setAp_p(rs.getString("Ap_pat"));
+                        embqd.setAp_m(rs.getString("Ap_mat"));
+                        embqd.setDireccion(rs.getString("Direccion"));
+                        embqd.setCorreo(rs.getString("Correo"));
+                        embqd.setTelefono(rs.getString("Telefono"));
+                        embqd.setSexo(rs.getString("Sexo"));
+                        embqd.setCargo(rs.getString("Cargo"));
+                        embqd.setArea_tra(rs.getString("Area_Trabajo"));
+                        lista.add(embqd);
+                
+		}
+		rs.close();
+		ps.close();
+	} catch(Exception e) {
+		System.out.println(e.getMessage());
+	}
+        return lista;
+    }
 }

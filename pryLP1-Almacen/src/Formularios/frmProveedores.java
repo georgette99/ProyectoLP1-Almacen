@@ -28,7 +28,7 @@ public class frmProveedores extends javax.swing.JFrame {
 
     public frmProveedores() {
         initComponents();
-        
+        listar(1);
         setLocationRelativeTo(this);
         btnAgregar.setIcon(setIcono("/Imagenes/Agregar.png", btnAgregar));
         btnEditar.setIcon(setIcono("/Imagenes/editar.png", btnEditar));
@@ -185,6 +185,34 @@ public class frmProveedores extends javax.swing.JFrame {
             }
         }
         
+    }
+    
+    void buscar (){
+        try {
+            
+            
+            int CampoDeBusqueda = Integer.parseInt(txtBuscar.getText());
+            clsProveedores prov = new clsProveedores();
+            ArrayList<clsProveedores> pr = proveedoresDAO.mtdBuscarRegistroProveedores(CampoDeBusqueda);
+            
+            if(pr == null){
+                JOptionPane.showMessageDialog(null,"No se ha encontrado el registro");
+            }
+            else{
+                modelo = new DefaultTableModel(null, cabecera);
+                TablaProveedores.setModel(modelo);
+                JOptionPane.showMessageDialog(null,"Registro encontrado");
+                for(clsProveedores u:pr){
+                        modelo.addRow(new Object[]{
+                            u.getCodigo(), u.getNombre(),u.getDireccion(), u.getTelefono(), u.getCorreo(),
+                        });
+                }
+                //listar(2);
+            }     
+            objcnn.mtdCerrarBD();
+        } catch (Exception e) {
+            System.out.println("Error" + e );
+        }
     }
     
     void eliminar() throws ClassNotFoundException {
@@ -430,15 +458,16 @@ public class frmProveedores extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnBuscar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBuscar))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -447,7 +476,7 @@ public class frmProveedores extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -507,23 +536,7 @@ public class frmProveedores extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        try {
-            objcnn.mtdAbrirBD();
-            
-            String  CampoDeBusqueda;
-            CampoDeBusqueda = txtBuscar.getText();
-            if(objcnn.mtdBuscarRegistroProveedor(CampoDeBusqueda)== null){
-                System.out.println("No se ha encontrado el registro");
-            }
-            else{
-                System.out.println("Registro encontrado");
-                listar(2);
-            }
-            
-            objcnn.mtdCerrarBD();
-        } catch (Exception e) {
-            System.out.println("Error" + e );
-        }
+        buscar();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
