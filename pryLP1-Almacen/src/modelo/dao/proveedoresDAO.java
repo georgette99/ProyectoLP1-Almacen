@@ -176,4 +176,37 @@ public class proveedoresDAO {
         
         return res;
     }
+    
+    public static ArrayList<clsProveedores> mtdBuscarRegistroProveedores(int pDato)throws ClassNotFoundException{
+        String strSQL = "SELECT * FROM proveedores WHERE Codigo = ?";
+        Connection cn = clsConexion.mtdAbrirBD();
+        
+        ArrayList<clsProveedores> lista = new ArrayList<clsProveedores>();
+        
+	PreparedStatement ps;
+        
+	try {
+		ps = cn.prepareStatement(strSQL);
+		ps.setInt(1, pDato);
+
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+                    clsProveedores prov = new clsProveedores();
+                    
+			prov.setCodigo(rs.getInt("Codigo"));
+			prov.setNombre(rs.getString("Nombre"));
+                        prov.setDireccion(rs.getString("Direccion"));
+                        prov.setTelefono(rs.getString("Telefono"));
+                        prov.setCorreo(rs.getString("Correo"));
+                        
+                        lista.add(prov);
+                
+		}
+		rs.close();
+		ps.close();
+	} catch(Exception e) {
+		System.out.println(e.getMessage());
+	}
+        return lista;
+    }
 }

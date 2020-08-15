@@ -227,4 +227,37 @@ public class clienteDAO {
         return res;
     }
     
+    public static ArrayList<clsClientes> mtdBuscarRegistroClientes(int pDato)throws ClassNotFoundException{
+        String strSQL = "SELECT * FROM clientes WHERE Codigo = ?";
+        Connection cn = clsConexion.mtdAbrirBD();
+        
+        ArrayList<clsClientes> lista = new ArrayList<clsClientes>();
+        
+	PreparedStatement ps;
+        
+	try {
+		ps = cn.prepareStatement(strSQL);
+		ps.setInt(1, pDato);
+
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+                    clsClientes cliente = new clsClientes();
+                    
+			cliente.setCodigo(rs.getInt("Codigo"));
+                        cliente.setRUC(rs.getString("RUC"));
+			cliente.setNombre(rs.getString("Nombre"));
+                        cliente.setDireccion(rs.getString("Direccion"));
+                        cliente.setTelefono(rs.getString("Telefono"));
+                        cliente.setCorreo(rs.getString("Correo"));
+                        
+                        lista.add(cliente);
+                
+		}
+		rs.close();
+		ps.close();
+	} catch(Exception e) {
+		System.out.println(e.getMessage());
+	}
+        return lista;
+    }
 }

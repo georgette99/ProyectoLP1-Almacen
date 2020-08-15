@@ -578,13 +578,13 @@ public class clsConexion {
     }
     
     //LOGIN
-    public int mtdLogin(String nombre, String clave){
+    public int mtdLogin(String usuario, String clave){
         String strSQL3 = "SELECT * FROM usuarios WHERE Usuario = ? AND Clave = ?";      
 	PreparedStatement ps;
         int salida = -1;
 	try {
 		ps = objcnn.prepareStatement(strSQL3);
-		ps.setString(1, nombre);
+		ps.setString(1, usuario);
                 ps.setString(2, clave);
 
 		ResultSet rs = ps.executeQuery();

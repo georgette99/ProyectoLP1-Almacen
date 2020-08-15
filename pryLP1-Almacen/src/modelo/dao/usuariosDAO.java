@@ -173,8 +173,32 @@ public class usuariosDAO {
         
         return res;
     }
+    
+    public static int mtdLogin(String usuario, String clave) throws ClassNotFoundException {
+        String strSQL3 = "SELECT * FROM usuarios WHERE Usuario = ? AND Clave = ?";      
+	PreparedStatement ps;
+        int salida = -1;
+        Connection conn = clsConexion.mtdAbrirBD();
+	try {
+		ps = conn.prepareStatement(strSQL3);
+		ps.setString(1, usuario);
+                ps.setString(2, clave);
 
+		ResultSet rs = ps.executeQuery();
+		if(rs.next()){
+                    salida =1;
+                }
+                conn.close();
+		rs.close();
+		ps.close();
+	} catch(Exception e) {
+		System.out.println(e.getMessage());
+	}
+        return salida;
+    }
     public static int mtdModificarDatoUsuario(String usuario) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    
 }

@@ -194,6 +194,34 @@ public final class frmClientes extends javax.swing.JFrame {
         
     }
     
+    void buscar (){
+        try {
+            
+            
+            int CampoDeBusqueda = Integer.parseInt(txtBuscar.getText());
+            clsClientes cli = new clsClientes();
+            ArrayList<clsClientes> cl = clienteDAO.mtdBuscarRegistroClientes(CampoDeBusqueda);
+            
+            if(cl == null){
+                JOptionPane.showMessageDialog(null,"No se ha encontrado el registro");
+            }
+            else{
+                modelo = new DefaultTableModel(null, cabecera);
+                TablaClientes.setModel(modelo);
+                JOptionPane.showMessageDialog(null,"Registro encontrado");
+                for(clsClientes u:cl){
+                        modelo.addRow(new Object[]{
+                            u.getCodigo(), u.getRUC(), u.getNombre(),u.getDireccion(), u.getTelefono(), u.getCorreo(),
+                        });
+                }
+                //listar(2);
+            }     
+            objcnn.mtdCerrarBD();
+        } catch (Exception e) {
+            System.out.println("Error" + e );
+        }
+    }
+    
     void eliminar() throws ClassNotFoundException {
         if(cliente != null) {
             
@@ -213,50 +241,7 @@ public final class frmClientes extends javax.swing.JFrame {
             }
         }
     }
-    /*void listar(int opcion){
-        modelo = new DefaultTableModel(null, cabecera);
-        TablaClientes.setModel(modelo);
-        try {
-            objcnn.mtdAbrirBD();
-            switch (opcion){
-                case 1:
-                    ArrayList<clsClientes> usu = objcnn.obtenerTodosClientes();
-                    for(clsClientes u:usu){
-                        modelo.addRow(new Object[]{
-                            u.getCodigo(), u.getRUC(), u.getNombre(),u.getDireccion(), u.getTelefono(), u.getCorreo(),
-                        });
-                    }
-                    break;
-                case 2:
-                    String Codigo = txtBuscar.getText();
-                    clsClientes usr1 = objcnn.mtdBuscarRegistroCliente(Codigo);
-                    modelo.addRow(new Object[]{
-                        usr1.getCodigo(), usr1.getRUC(), usr1.getNombre(), usr1.getDireccion(), usr1.getTelefono(), usr1.getCorreo(),});
-                    break;
-                case 3:
-                    String nombre2 = txtNuevo.getText();
-                    clsUsuario usr2 = objAccesoBD.mtdBuscarRegistro(nombre2);
-                    modelo.addRow(new Object[]{
-                        usr2.getId(), usr2.getNombre(), usr2.getClave()
-                    });
-                    break;
-                default:
-                    System.out.println("Opción inválida");
-                    break;
-            }
-
-            
-            objcnn.mtdCerrarBD();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(frmEmpleados.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }*/
     
-    
-    
-    
-    
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -587,23 +572,9 @@ public final class frmClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-       try {
-            objcnn.mtdAbrirBD();
-            
-            String  CampoDeBusqueda;
-            CampoDeBusqueda = txtBuscar.getText();
-            if(objcnn.mtdBuscarRegistroCliente(CampoDeBusqueda)== null){
-                System.out.println("No se ha encontrado el registro");
-            }
-            else{
-                System.out.println("Registro encontrado");
-                listar(2);
-            }
-            
-            objcnn.mtdCerrarBD();
-        } catch (Exception e) {
-            System.out.println("Error" + e );
-        }
+       
+        buscar();
+           
     }
           
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
@@ -616,7 +587,7 @@ public final class frmClientes extends javax.swing.JFrame {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmEmpleados().setVisible(true);
+                new frmClientes().setVisible(true);
             }
         });
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -659,9 +630,7 @@ public final class frmClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        this.dispose();
-        frmPrincipal principal = new frmPrincipal();
-        principal.setVisible(true);
+        // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
     
     public Icon setIcono(String url, JButton boton){

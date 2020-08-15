@@ -526,14 +526,6 @@ public class frmProveedores extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void TablaProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaProveedoresMouseClicked
-       try {
-           seleccionar();
-       } catch (ClassNotFoundException ex) {
-           Logger.getLogger(frmProveedores.class.getName()).log(Level.SEVERE, null, ex);
-       }
-    }//GEN-LAST:event_TablaProveedoresMouseClicked
-
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
        try {
            eliminar();
@@ -549,6 +541,14 @@ public class frmProveedores extends javax.swing.JFrame {
            Logger.getLogger(frmProveedores.class.getName()).log(Level.SEVERE, null, ex);
        }  
     }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void TablaProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaProveedoresMouseClicked
+        try {
+            seleccionar();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmProveedores.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_TablaProveedoresMouseClicked
 
     /**
      * @param args the command line arguments

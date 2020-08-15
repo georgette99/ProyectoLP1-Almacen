@@ -10,7 +10,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
-
+import modelo.dao.usuariosDAO;
 public class frmLogin extends javax.swing.JFrame {
     clsConexion con = new clsConexion();
     private int contador = 0;
@@ -24,11 +24,11 @@ public class frmLogin extends javax.swing.JFrame {
     
     void listar(){
         try {
-            con.mtdAbrirBD();
+            
             String usuario = txtUsuario.getText();
             String clave = txtClave.getText();
-
-            if(con.mtdLogin(usuario, clave)==-1){
+            int res = usuariosDAO.mtdLogin(usuario, clave);
+            if(res==-1){
                 contador++;
                 JOptionPane.showMessageDialog(null, "Usuario no ncontrado\nVerifique su clave");;
                 if(contador>=3){
